@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	PadInput::GetIns()->Initialize(winApp);
 
 	//Soundの初期化
-	sound = new Sound();
+	sound = Sound::GetInstance();
 	if (!sound->Initialize()) {
 		assert(0);
 		return 1;
@@ -93,7 +93,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	//DirectX解放
 	safe_delete(dxCommon);
 	//sound解放
-	safe_delete(sound);
+	//safe_delete(sound);
 	//PostEffect解放
 	safe_delete(postEffect);
 	return 0;
