@@ -93,6 +93,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	isClear = false;
 	isTitle = true;
 
+	//sound
+	sound->LoadWave("ice1.wav");
+	float a = 0.1;
+	sound->SetVolume("ice1.wav", a);
 }
 
 void GameScene::Update() {
@@ -168,10 +172,13 @@ void GameScene::Update() {
 			object->Update();
 		}
 	}
-
+	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+		sound->PlayWave("ice1.wav", 0);
+	}
 	if (isClear) {
 		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
 			Reset();
+			
 		}
 	}
 
