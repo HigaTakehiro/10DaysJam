@@ -79,7 +79,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\K020G1382\TD2\10DaysJam\MyEngine\Object3d;C:\K020G1382\TD2\10DaysJam\MyEngine\Object2D;C:\K020G1382\TD2\10DaysJam\MyEngine\lib\fbx_sdk\include;C:\K020G1382\TD2\10DaysJam\MyEngine\Input;C:\K020G1382\TD2\10DaysJam\MyEngine\GameScene;C:\K020G1382\TD2\10DaysJam\MyEngine\FBX;C:\K020G1382\TD2\10DaysJam\MyEngine\DirectXTex;C:\K020G1382\TD2\10DaysJam\MyEngine\Camera;C:\K020G1382\TD2\10DaysJam\MyEngine\Base;C:\K020G1382\TD2\10DaysJam\MyEngine\Audio</IncludePath>
-    <LibraryPath>C:\K020G1382\TD2\10DaysJam\MyEngine\lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
