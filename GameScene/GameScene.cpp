@@ -26,7 +26,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//カメラ初期化
 	camera = new Camera;
-	camera->SetEye(XMFLOAT3(50, 1, -100));
+	camera->SetEye(XMFLOAT3(50, 1, -300));
 	camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	//Sprite & DebugTextの初期化
@@ -91,7 +91,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	isDead = false;
 	isClear = false;
-	isTitle = true;
+	isTitle = false;
 
 }
 
@@ -109,6 +109,15 @@ void GameScene::Update() {
 	}
 
 	if (!isTitle && !isClear && !isDead) {
+		//プロトタイプ
+		//プレイヤーの落下
+		//XMFLOAT3 eyepos = camera->GetEye();
+		//eyepos.y = player->GetPlayerPos().y;
+		//camera->SetEye(eyepos);
+		//XMFLOAT3 targetpos = camera->GetTarget();
+		//targetpos.y = eyepos.y;
+		//camera->SetTarget(targetpos);
+		//エネミーを上から踏んだらジャンプ
 
 		if (input->PushKey(DIK_RIGHT)) {
 			camera->CameraMoveEyeVector({ +2.0f, 0.0f, 0.0f });
@@ -135,6 +144,9 @@ void GameScene::Update() {
 		sprintf_s(yPos, "Xpoint : %d, YPoint : %d", MouseInput::GetIns()->GetMousePoint().x, MouseInput::GetIns()->GetMousePoint().y);
 		debugText.Print(xPos, 0, 0, 2.0f);
 		debugText.Print(yPos, 0, 50, 2.0f);
+		char fallSpeed[256];
+		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
+		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
@@ -142,6 +154,12 @@ void GameScene::Update() {
 			for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
 				if (Collision::GetIns()->SphereCollision(bullet->GetBulletObj(), enemy->GetEnemyObj())) {
 					enemy->OnCollision();
+				}
+			}
+			if (Collision::GetIns()->SphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(),8,8)) {
+				if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
+				{
+					player->StampJump();
 				}
 			}
 		}
@@ -156,10 +174,19 @@ void GameScene::Update() {
 			enemy->Update();
 		}
 
+		XMFLOAT3 eyepos = camera->GetEye();
+		eyepos.y = player->GetPlayerPos().y;
+		camera->SetEye(eyepos);
+		XMFLOAT3 targetpos = camera->GetTarget();
+		targetpos.y = player->GetPlayerPos().y;
+		camera->SetTarget(targetpos);
+
 		celetialSphere->Update();
 		ground->Update();
 		player->Update();
 		object1->Update();
+
+
 
 		for (auto object : objects) {
 			object->Update();
@@ -167,6 +194,11 @@ void GameScene::Update() {
 		for (auto object : objects2) {
 			object->Update();
 		}
+	}
+
+	if (input->GetIns()->TriggerKey(DIK_R))
+	{
+		Reset();
 	}
 
 	if (isClear) {
@@ -191,9 +223,9 @@ void GameScene::Draw() {
 
 	//3Dオブジェクト描画処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	ground->Draw();
+	//ground->Draw();
 	celetialSphere->Draw();
-	
+
 	if (!isDead) {
 		player->ObjectDraw();
 	}
@@ -235,14 +267,14 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Reset() {
-	camera->SetEye(XMFLOAT3(50, 1, -100));
-	camera->SetTarget(XMFLOAT3(50, 0, 0));
+	//camera->SetEye(XMFLOAT3(50, 1, -100));
+	//camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	player->Reset();
 
 	isDead = false;
 	isClear = false;
-	isTitle = true;
+	//isTitle = true;
 
 	LoadEnemyData();
 }

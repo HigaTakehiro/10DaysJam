@@ -18,6 +18,12 @@ using namespace Microsoft::WRL;
 
 class Player
 {
+	enum JumpType
+	{
+		NONE_JUMP,
+		STAMP_JUMP,
+	};
+
 public: //メンバ関数
 	/// <summary>
 	/// 初期化処理
@@ -48,7 +54,7 @@ public: //メンバ関数
 	/// 位置取得
 	/// </summary>
 	/// <returns>位置</returns>
-	const XMFLOAT3 GetPlayerPos() { return playerWPos; }
+	const XMFLOAT3 GetPlayerPos() { return playerLPos; }
 
 	/// <summary>
 	/// 向き取得
@@ -73,6 +79,16 @@ public: //メンバ関数
 	/// </summary>
 	void Reset();
 
+	/// <summary>
+	/// 敵を踏んでジャンプ
+	/// </summary>
+	void StampJump();
+
+	/// <summary>
+	/// 落下速度取得
+	/// </summary>
+	float GetFallSpeed() { return fallSpeed; }
+
 private: //メンバ関数
 	/// <summary>
 	/// 移動処理
@@ -89,9 +105,19 @@ private: //メンバ関数
 	/// </summary>
 	void AimUpdate();
 
+	/// <summary>
+	/// 自由落下更新処理
+	/// </summary>
+	void FreeFall();
+
+	/// <summary>
+	/// ジャンプ更新処理
+	/// </summary>
+	void JumpUpdate();
+
 private: //メンバ変数
 	Vector3 playerLPos = { 0, 0, 0 };
-	Vector3 playerWPos = { 0, 0, 0 };
+	//Vector3 playerWPos = { 0, 0, 0 };
 	Vector3 playerRot = { 0, 0, 0 };
 	Vector3 playerScale = { 0, 0, 0 };
 
@@ -114,5 +140,16 @@ private: //メンバ変数
 
 	Vector3 aimPos3d;
 	Camera* camera;
+
+	float fallSpeed = 0;
+	float fallTime =0;
+	const float gravity = 0.098f;
+
+	float jumpTime = 0;
+	const float jumpTimePower = 0.3;
+
+	JumpType jumpType = NONE_JUMP;
+
+
 };
 

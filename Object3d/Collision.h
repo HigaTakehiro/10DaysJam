@@ -26,7 +26,7 @@ public: //メンバ関数
 	/// <param name="object1">判定したいオブジェクト1</param>
 	/// <param name="object2">判定したいオブジェクト2</param>
 	/// <returns>当たった</returns>
-	bool SphereCollision(Object3d* object1, Object3d* object2);
+	bool SphereCollision(Object3d* object1, Object3d* object2, float r1 = -1, float r2 = -1);
 
 private: //メンバ変数
 	Vector3 object1Pos = { 0, 0, 0 };

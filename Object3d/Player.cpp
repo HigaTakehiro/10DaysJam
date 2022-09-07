@@ -11,7 +11,7 @@ void Player::Initialize(Camera* camera) {
 	playerModel = Model::CreateModel("Player");
 	player = Object3d::Create(playerModel);
 	playerScale = { 2, 2, 2 };
-	playerLPos = { 50, 0, -50 };
+	playerLPos = { 50, 950, -50 };
 	playerRot = { 0, 180, 0 };
 	player->SetScale(playerScale);
 	player->SetPosition(playerLPos);
@@ -23,6 +23,7 @@ void Player::Initialize(Camera* camera) {
 	aim3d->SetPosition(Vector3(0, 0, 50));
 	aim3d->SetRotation(Vector3(0, 0, 0));
 	//aim3d->SetParent(player);
+
 }
 
 void Player::Finalize() {
@@ -36,8 +37,10 @@ void Player::Update() {
 	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
 
 	Move();
+	FreeFall();
+	JumpUpdate();
 
-	playerWPos = player->GetMatWorld().r[3];
+	//playerWPos = player->GetMatWorld().r[3];
 
 	AimUpdate();
 
@@ -105,17 +108,17 @@ void Player::Move() {
 }
 
 void Player::Shot() {
-	const float bulletSpeed = 1.0f;
-	XMVECTOR velocity = { 0, 0, bulletSpeed };
+	//const float bulletSpeed = 1.0f;
+	//XMVECTOR velocity = { 0, 0, bulletSpeed };
 
-	velocity = MatCalc::GetIns()->VecDivided(velocity, player->GetMatWorld());
+	//velocity = MatCalc::GetIns()->VecDivided(velocity, player->GetMatWorld());
 
-	std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-	newBullet->Initialize(playerWPos, velocity);
+	//std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+	//newBullet->Initialize(playerWPos, velocity);
 
-	bullets.push_back(std::move(newBullet));
+	//bullets.push_back(std::move(newBullet));
 
-	isShot = false;
+	//isShot = false;
 
 	//shotPos.z += shotSpeed;
 	//shot->SetPosition(shotPos);
@@ -127,8 +130,9 @@ void Player::Shot() {
 
 void Player::Reset() {
 	playerScale = { 2, 2, 2 };
-	playerLPos = { 0, 0, 50 };
+	playerLPos = { 0, 950, 50 };
 	playerRot = { 0, 0, 0 };
+	fallTime = 0.0f;
 
 	player->SetPosition(playerLPos);
 	bullets.clear();
@@ -168,4 +172,36 @@ void Player::AimUpdate() {
 
 	aim3d->SetPosition(aimPos3d);
 
+}
+
+void Player::FreeFall()
+{
+	fallTime += 0.1f;
+	//float fallSpeed = 2 / 1 * gravity * fallTime * fallTime;
+	fallSpeed = gravity * fallTime * fallTime / 3;
+	if (fallSpeed > 4) { fallSpeed = 4.0f; }
+	playerLPos.y -= fallSpeed;
+	player->SetPosition(playerLPos);
+}
+
+void Player::JumpUpdate()
+{
+	if (jumpType != NONE_JUMP)
+	{
+		fallTime = 0.0f;
+		if (STAMP_JUMP) {
+			jumpTime += 0.1f;
+			playerLPos.y += jumpTimePower / jumpTime;
+			player->SetPosition(playerLPos);
+			if (jumpTimePower / jumpTime <= 0.1) {
+				jumpTime = 0;
+				jumpType = NONE_JUMP;
+			}
+		}
+	}
+}
+
+void Player::StampJump()
+{
+	jumpType = STAMP_JUMP;
 }
