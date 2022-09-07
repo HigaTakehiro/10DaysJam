@@ -8,12 +8,8 @@
 class Enemy
 {
 	enum EnemyStyle {
-		STOP_PTAG,
-		STOP_STR,
-		UDMOVE_PTAG,
-		UDMOVE_STR,
-		LRMOVE_PTAG,
-		LRMOVE_STR
+		ONEJUMP_ENEMY,
+		TWOJUMP_ENEMY
 	};
 
 public: //ÉÅÉìÉoä÷êî

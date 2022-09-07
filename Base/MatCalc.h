@@ -36,6 +36,14 @@ public: //静的メンバ関数
 public: //メンバ関数
 
 	/// <summary>
+	/// 座標と行列を掛ける
+	/// </summary>
+	/// <param name="pos">座標</param>
+	/// <param name="mat">行列</param>
+	/// <returns>計算結果</returns>
+	XMVECTOR Pdivided(XMVECTOR pos, XMMATRIX mat);
+
+	/// <summary>
 	/// 座標に行列を掛けて最後にw除算する
 	/// </summary>
 	/// <param name="vec">座標</param>

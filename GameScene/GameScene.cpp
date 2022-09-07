@@ -93,6 +93,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	isClear = false;
 	isTitle = false;
 
+	//sound
+	sound->LoadWave("ice1.wav");
+	float a = 0.1;
+	sound->SetVolume("ice1.wav", a);
 }
 
 void GameScene::Update() {
@@ -156,7 +160,7 @@ void GameScene::Update() {
 					enemy->OnCollision();
 				}
 			}
-			if (Collision::GetIns()->SphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(),8,8)) {
+			if (Collision::GetIns()->SphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
 				if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
 				{
 					player->StampJump();
@@ -201,9 +205,14 @@ void GameScene::Update() {
 		Reset();
 	}
 
+	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+		sound->PlayWave("ice1.wav", 0);
+	}
+
 	if (isClear) {
 		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
 			Reset();
+
 		}
 	}
 
