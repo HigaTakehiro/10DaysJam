@@ -97,6 +97,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	sound->LoadWave("ice1.wav");
 	float a = 0.1;
 	sound->SetVolume("ice1.wav", a);
+	
+	//Particle
+	particleMan = ParticleManager::Create(dxCommon->GetDev());
+	particleMan->Initialize(dxCommon->GetDev());
+
 }
 
 void GameScene::Update() {
@@ -187,9 +192,16 @@ void GameScene::Update() {
 			Reset();
 		}
 	}
+	if (input->PushKey(DIK_1))flag = 1;
+	if (input->PushKey(DIK_2))flag = 2;
+	if (input->PushKey(DIK_3))flag = 3;
+	if (input->PushKey(DIK_4))flag = 4;
+	if (input->PushKey(DIK_5))flag = 5;
+	ParticleUpdate();
 }
 
 void GameScene::Draw() {
+	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
 	//ƒXƒvƒ‰ƒCƒg•`‰æˆ—(”wŒi)
 	Sprite::PreDraw(dxCommon->GetCmdList());
@@ -200,7 +212,7 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	ground->Draw();
 	celetialSphere->Draw();
-	
+
 	if (!isDead) {
 		player->ObjectDraw();
 	}
@@ -209,7 +221,9 @@ void GameScene::Draw() {
 	}
 	//object1->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
-
+	ParticleManager::PreDraw(cmdList);
+	particleMan->Draw();
+	ParticleManager::PostDraw();
 	//ƒXƒvƒ‰ƒCƒg•`‰æˆ—(UI“™)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	player->SpriteDraw();
@@ -318,4 +332,106 @@ void GameScene::EnemyDataUpdate() {
 			enemies.push_back(std::move(newEnemy));
 		}
 	}
+}
+
+void GameScene::ParticleCoal()
+{
+	const float rnd_pos = 10.0f;
+	const float radius = 0.3f;
+	const float rnd_vel = 0.1f;
+	for (int i = 0; i < PCount * 2; i++)
+	{
+
+
+		//XMFLOAT3 pos{};
+	/*	pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		*/
+
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.00003f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+
+		XMFLOAT3 vel{};
+		//vel.z = tan((radian[i * angle] * PI) / 180) * radius;
+		//for (int j = 0; j < PCount/2; j++)
+		//{
+		//	vel.x = cos((radian[j * angle] * PI) / 180) * radius;
+
+		//	vel.y = sin((radian[j * angle] * PI) / 180) * radius;
+		//	particleMan->Add(30, pos, vel, acc, 1.0f, 0.0f);
+		//}
+
+
+
+
+
+
+		if (i % 45 == 0)
+		{
+			if (i + angle < 360)
+			{
+				vel.z = sin((radian[i + angle] * PI) / 180) * radius;
+				vel.x = cos((radian[i + angle] * PI) / 180) * radius;
+				particleMan->Add(100, pos, vel, acc, 1.0f, 1.0f);
+			}
+			if (i + angle > 360)
+			{
+				vel.z = sin((radian[i + angle - 360] * PI) / 180) * radius;
+				vel.x = cos((radian[i + angle - 360] * PI) / 180) * radius;
+				particleMan->Add(100, pos, vel, acc, 1.0f, 1.0f);
+			}
+		}
+
+		/*
+		if (i * angle < 360)
+		{
+			vel.z = sin((radian[i + angle] * PI) / 180) * radius;
+			vel.x = cos((radian[i + angle] * PI) / 180) * radius;
+			particleMan->Add(100, pos, vel, acc, 1.0f, 1.0f);
+		}
+		if (i * angle > 360)
+		{
+			vel.z = sin((radian[i + angle-360] * PI) / 180) * radius;
+			vel.x = cos((radian[i + angle-360] * PI) / 180) * radius;
+			particleMan->Add(100, pos, vel, acc, 1.0f, 1.0f);
+		}*/
+		//vel.y = sin((radian[i * angle] * PI) / 180) * radius;
+
+
+
+
+
+		/*vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;*/
+		//particleMan->Add(60, pos, vel, acc,1.0f,0.0f);
+
+	}
+}
+
+void GameScene::ParticleUpdate()
+{
+	if (input->TriggerKey(DIK_R))
+	{
+		if (flag == 1)particleMan->PBustr(angle, pos);
+		if (flag == 2)particleMan->PArts(angle, pos);
+		if (flag == 3)particleMan->PQuik(angle, pos);
+		if (flag == 4)particleMan->All(angle, pos);
+		if (flag == 5)
+		{
+			angle++;
+			ParticleCoal();
+			pos.y = (rand() % 10) + 1;
+		}
+	}
+	if (input->TriggerKey(DIK_Q))
+	{
+		angle = 0;
+		pos = {};
+	}
+	particleMan->Update();
+
 }

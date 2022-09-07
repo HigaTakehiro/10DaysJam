@@ -44,7 +44,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		return 1;
 	}
 	//sound->PlayWave("Resources/Alarm01.wav", true, 0.2f);
-
+	if (!ParticleManager::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height)) {
+		assert(0);
+		return 1;
+	}
 	gameScene = new GameScene();
 	gameScene->Initialize(dxCommon, sound);
 
