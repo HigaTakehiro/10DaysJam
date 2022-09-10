@@ -4,6 +4,9 @@
 #include "Vector3.h"
 #include "SafeDelete.h"
 #include "Player.h"
+#include "FbxLoader.h"
+#include "FBXObject3d.h"
+#include "DirectXCommon.h"
 
 class Enemy
 {
@@ -27,7 +30,7 @@ public: //メンバ関数
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw();
+	void Draw(DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 衝突時コールバック関数
@@ -50,6 +53,8 @@ private: //メンバ変数
 
 	Model* enemyModel;
 	Object3d* enemy;
+	FBXObject3d* testEnemy;
+	FBXModel* testEnemyModel;
 	Vector3 pos;
 	bool isDead;
 };

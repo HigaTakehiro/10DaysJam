@@ -13,6 +13,15 @@ void Enemy::Initialize(const std::string& modelName, Vector3 pos, Vector3 rot, V
 	enemy->SetPosition(pos);
 	enemy->SetRotation(rot);
 	enemy->SetScale(scale);
+
+	//testEnemyModel = FbxLoader::GetInstance()->LoadModelFromFile(modelName);
+    //testEnemy = new FBXObject3d;
+	//testEnemy->Initialize();
+	//testEnemy->SetModel(testEnemyModel);
+	//testEnemy->SetPosition(pos);
+	//testEnemy->SetRotation(rot);
+	//testEnemy->SetScale(scale);
+	//testEnemy->PlayAnimation();
 }
 
 void Enemy::Update() {
@@ -21,7 +30,7 @@ void Enemy::Update() {
 	}
 }
 
-void Enemy::Draw() {
+void Enemy::Draw(DirectXCommon* dxCommon) {
 	enemy->Draw();
 }
 
