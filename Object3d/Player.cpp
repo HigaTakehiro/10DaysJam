@@ -34,11 +34,12 @@ void Player::Finalize() {
 }
 
 void Player::Update() {
-	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
+		bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
 
 	Move();
 	FreeFall();
 	JumpUpdate();
+	DecelerationBoost();
 
 	//playerWPos = player->GetMatWorld().r[3];
 
@@ -176,12 +177,14 @@ void Player::AimUpdate() {
 
 void Player::FreeFall()
 {
-	fallTime += 0.1f;
-	//float fallSpeed = 2 / 1 * gravity * fallTime * fallTime;
-	fallSpeed = gravity * fallTime * fallTime / 3;
-	if (fallSpeed > 4) { fallSpeed = 4.0f; }
-	playerLPos.y -= fallSpeed;
-	player->SetPosition(playerLPos);
+	if (fallFlag) {
+		fallTime += 0.1f;
+		//float fallSpeed = 2 / 1 * gravity * fallTime * fallTime;
+		fallSpeed = gravity * fallTime * fallTime / 3;
+		if (fallSpeed > 4) { fallSpeed = 4.0f; }
+		playerLPos.y -= fallSpeed;
+		player->SetPosition(playerLPos);
+	}
 }
 
 void Player::JumpUpdate()
@@ -189,6 +192,7 @@ void Player::JumpUpdate()
 	if (jumpType != NONE_JUMP)
 	{
 		fallTime = 0.0f;
+		fallFlag = false;
 		if (STAMP_JUMP) {
 			jumpTime += 0.1f;
 			playerLPos.y += jumpTimePower / jumpTime;
@@ -196,6 +200,7 @@ void Player::JumpUpdate()
 			if (jumpTimePower / jumpTime <= 0.1) {
 				jumpTime = 0;
 				jumpType = NONE_JUMP;
+				fallFlag = true;
 			}
 		}
 	}
@@ -204,4 +209,20 @@ void Player::JumpUpdate()
 void Player::StampJump()
 {
 	jumpType = STAMP_JUMP;
+}
+
+void Player::DecelerationBoost()
+{
+	if (KeyInput::GetIns()->PushKey(DIK_RSHIFT)) {
+		boostTime += 0.1f;
+		boostSpeed = boostPower * boostTime;
+		if (boostSpeed > 2) { boostSpeed = 2; }
+		playerLPos.y += boostSpeed;
+		player->SetPosition(playerLPos);
+	}
+	else
+	{
+		boostTime = 0;
+		boostSpeed = 0;
+	}
 }

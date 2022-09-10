@@ -89,6 +89,11 @@ public: //メンバ関数
 	/// </summary>
 	float GetFallSpeed() { return fallSpeed; }
 
+	/// <summary>
+	/// 減速ブースト
+	/// </summary>
+	void DecelerationBoost();
+
 private: //メンバ関数
 	/// <summary>
 	/// 移動処理
@@ -141,14 +146,20 @@ private: //メンバ変数
 	Vector3 aimPos3d;
 	Camera* camera;
 
+	bool fallFlag = true;
 	float fallSpeed = 0;
 	float fallTime =0;
 	const float gravity = 0.098f;
 
 	float jumpTime = 0;
 	const float jumpTimePower = 0.3;
-
 	JumpType jumpType = NONE_JUMP;
+
+	bool decelerationFlag = false;
+	const float maxBoostSpeed = 2.0f;
+	const float boostPower = 2.0f;
+	float boostSpeed = 0.0f;
+	float boostTime = 0.0f;
 
 
 };
