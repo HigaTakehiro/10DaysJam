@@ -223,7 +223,7 @@ void FBXObject3d::Update() {
 	matWorld *= matTrans;
 
 	//ビュープロジェクション行列
-	const XMMATRIX& matViewProjection = matWorld * camera->GetMatView() * camera->GetMatProjection();
+	const XMMATRIX& matViewProjection = camera->GetMatView() * camera->GetMatProjection();
 	//モデルのメッシュトランスフォーム
 	const XMMATRIX& modelTransform = model->GetModelTransform();
 	//カメラ座標
@@ -246,6 +246,11 @@ void FBXObject3d::Update() {
 	//定数バッファへデータ転送
 	ConstBufferDataSkin* constMapSkin = nullptr;
 	result = constBufferSkin->Map(0, nullptr, (void**)&constMapSkin);
+	//行列を一度リセット
+	for (int i = 0; i < MAX_BONES; i++) {
+		constMapSkin->bones[i] = XMMatrixIdentity();
+	}
+
 	for (int i = 0; i < bones.size(); i++) {
 		//今の姿勢行列
 		XMMATRIX matCurrentPose;
@@ -253,8 +258,10 @@ void FBXObject3d::Update() {
 		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
 		//XMMATRIXに変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
+		//モデルの変換行列を取得
+		XMMATRIX meshTransform = model->GetModelTransform();
 		//合成してスキニング行列に
-		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
+		constMapSkin->bones[i] = meshTransform * bones[i].invInitialPose * matCurrentPose * XMMatrixInverse(nullptr, meshTransform);
 	}
 	constBufferSkin->Unmap(0, nullptr);
 
