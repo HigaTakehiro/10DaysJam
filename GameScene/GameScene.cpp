@@ -82,12 +82,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	FBXObject3d::SetDevice(dxCommon->GetDev());
 	FBXObject3d::SetCamera(camera);
 	FBXObject3d::CreateGraphicsPipeline();
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	/*model1 = FbxLoader::GetInstance()->LoadModelFromFile("Enemy01");
 	object1 = new FBXObject3d;
 	object1->Initialize();
 	object1->SetModel(model1);
-	object1->SetScale({ 5.0f, 5.0f, 5.0f });
-	object1->PlayAnimation();
+	object1->SetScale({ 0.1f, 0.1f, 0.1f });
+	object1->PlayAnimation();*/
 
 	isDead = false;
 	isClear = false;
@@ -167,6 +167,13 @@ void GameScene::Update() {
 				}
 			}
 		}
+		//for (const std::unique_ptr<Enemy>& enemy : enemies) {
+		//	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
+		//		if (Collision::GetIns()->SphereCollision(bullet->GetBulletObj(), enemy->GetEnemyObj())) {
+		//			enemy->OnCollision();
+		//		}
+		//	}
+		//}
 
 		EnemyDataUpdate();
 
@@ -188,7 +195,7 @@ void GameScene::Update() {
 		celetialSphere->Update();
 		ground->Update();
 		player->Update();
-		object1->Update();
+		//object1->Update();
 
 
 
@@ -239,7 +246,7 @@ void GameScene::Draw() {
 		player->ObjectDraw();
 	}
 	for (std::unique_ptr<Enemy>& enemy : enemies) {
-		enemy->Draw();
+		enemy->Draw(dxCommon);
 	}
 	//object1->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
@@ -270,8 +277,8 @@ void GameScene::Finalize() {
 	objects2.clear();
 	objects2.shrink_to_fit();
 	safe_delete(mapchip);
-	safe_delete(object1);
-	safe_delete(model1);
+	/*safe_delete(object1);
+	safe_delete(model1);*/
 	FbxLoader::GetInstance()->Finalize();
 }
 
@@ -348,7 +355,7 @@ void GameScene::EnemyDataUpdate() {
 
 		if (isPos && isRot && isScale) {
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize("Enemy", pos, rot, scale);
+			newEnemy->Initialize("Enemy", pos, rot, scale); //FBX‚ğŒÄ‚Ño‚·ê‡‚ÍEnemy01‚ğŒÄ‚Ño‚µ‚Ä‚­‚¾‚³‚¢
 			enemies.push_back(std::move(newEnemy));
 		}
 	}

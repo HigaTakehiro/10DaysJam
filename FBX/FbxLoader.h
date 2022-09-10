@@ -68,12 +68,7 @@ public: //メンバ関数
 	void ParseMesh(FBXModel* model, FbxNode* fbxNode);
 
 	/// <summary>
-	/// 頂点座標読み取り
-	/// </summary>
-	void ParseMeshVertices(FBXModel* model, FbxMesh* fbxMesh);
-
-	/// <summary>
-	/// 面情報読み取り
+	/// 面情報&頂点情報読み取り
 	/// </summary>
 	void ParseMeshFaces(FBXModel* model, FbxMesh* fbxMesh);
 
@@ -114,4 +109,6 @@ private: //メンバ変数
 	FbxManager* fbxManager = nullptr;
 	//FBXインポータ
 	FbxImporter* fbxImporter = nullptr;
+	//コントロールポイントデータ
+	std::vector<std::vector<int>> controlPointsData;
 };
