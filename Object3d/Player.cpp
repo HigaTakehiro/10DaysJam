@@ -34,8 +34,11 @@ void Player::Finalize() {
 }
 
 void Player::Update() {
-		bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
-
+	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
+	if (KeyInput::GetIns()->TriggerKey(DIK_1)) {
+		if (fallFlag == false) { fallFlag = true; }
+		else { fallFlag = false; }
+	}
 	Move();
 	FreeFall();
 	JumpUpdate();
@@ -58,7 +61,7 @@ void Player::Update() {
 		Shot();
 	}
 
-	playerLPos.z = -50.0f;
+	//playerLPos.z = -50.0f;
 	//aim3d->SetPosition(Vector3(aimPos.x, aimPos.y, 50));
 
 	aim->SetPosition(XMFLOAT2(aimPos.x - 50.0f, aimPos.y - 50.0f));
@@ -131,7 +134,7 @@ void Player::Shot() {
 
 void Player::Reset() {
 	playerScale = { 2, 2, 2 };
-	playerLPos = { 0, 950, 50 };
+	playerLPos = { 0, 950, -50 };
 	playerRot = { 0, 0, 0 };
 	fallTime = 0.0f;
 

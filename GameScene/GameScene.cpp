@@ -67,6 +67,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	player = new Player();
 	player->Initialize(camera);
 
+	stageModel = Model::CreateModel("Block");
+	for (int i = 0; i < 20; i++) {
+		//stageObj[i] = Object3d::Create(stageModel);
+		//stageObj[i]->SetPosition({ 0,0,0 });
+		//stageObj[i]->SetScale({ 50,50,50 });
+	}
+
+	wall[0] = Object3d::Create(stageModel);
+	wall[0]->SetPosition({ -150,500,0 });
+	wall[0]->SetScale({ 50,5000,50 });
+	wall[1] = Object3d::Create(stageModel);
+	wall[1]->SetPosition({ 230,500,0 });
+	wall[1]->SetScale({ 50,5000,50 });
+
 	LoadEnemyData();
 
 	//MapChipの初期化
@@ -101,6 +115,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 void GameScene::Update() {
 	enemies.remove_if([](std::unique_ptr<Enemy>& enemy) {return enemy->IsDead(); });
+
+	stages.remove_if([](std::unique_ptr<Stage>& stage) {return stage->IsDead(); });
 
 	// DirectX毎フレーム処理　ここから
 	aimPosX = MouseInput::GetIns()->GetMousePoint().x;
@@ -155,25 +171,54 @@ void GameScene::Update() {
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
 		for (const std::unique_ptr<Enemy>& enemy : enemies) {
-			for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
-				if (Collision::GetIns()->SphereCollision(bullet->GetBulletObj(), enemy->GetEnemyObj())) {
-					enemy->OnCollision();
-				}
-			}
-			if (Collision::GetIns()->SphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
+			if (Collision::GetIns()->OBJSphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
 				if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
 				{
 					player->StampJump();
 				}
 			}
 		}
-		//for (const std::unique_ptr<Enemy>& enemy : enemies) {
-		//	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
-		//		if (Collision::GetIns()->SphereCollision(bullet->GetBulletObj(), enemy->GetEnemyObj())) {
-		//			enemy->OnCollision();
-		//		}
-		//	}
-		//}
+
+		//生成範囲に入ったら生成
+		//どのタイプを生成するか（）
+		//敵とかぶらないようにする
+		intervalTime--;
+		if (intervalTime < 0) {			
+			int type = rand() % 6;
+			float height = player->GetPlayerPos().y - 50;
+			std::unique_ptr<Stage> newStage = std::make_unique<Stage>();			
+			XMFLOAT3 staegepos = { 0,0,0 };
+			switch (type) {
+			case 0:
+				staegepos = { -50,height ,-50 };
+				break;
+			case 1:
+				staegepos = { 50,height ,-50 };
+				break;
+			case 2:
+				staegepos = { 150,height ,-50 };
+				break;
+			case 3:
+				staegepos = { -50,height - 20 ,-50 };
+				break;
+			case 4:
+				staegepos = { 50,height - 20,-50 };
+				break;
+			case 5:
+				staegepos = { 150,height - 20,-50 };
+				break;
+			case 6:
+				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
+				break;
+			case 7:
+				//何もでてこないタイプ
+				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
+				break;
+			}
+			newStage->Initialize("Block", staegepos, { 0,0,0 }, { 20,20,20 });
+			stages.push_back(std::move(newStage));	
+			intervalTime = rand() % 100;
+		}
 
 		EnemyDataUpdate();
 
@@ -196,8 +241,12 @@ void GameScene::Update() {
 		ground->Update();
 		player->Update();
 		//object1->Update();
-
-
+		for (std::unique_ptr<Stage>& stage : stages) {
+			stage->Update();
+		}
+		for (int i = 0; i < 2; i++) {
+			wall[i]->Update();
+		}
 
 		for (auto object : objects) {
 			object->Update();
@@ -241,6 +290,12 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	//ground->Draw();
 	celetialSphere->Draw();
+	for (std::unique_ptr<Stage>& stage : stages) {
+		stage->Draw();
+	}
+	for (int i = 0; i < 2; i++) {
+		wall[i]->Draw();
+	}
 
 	if (!isDead) {
 		player->ObjectDraw();

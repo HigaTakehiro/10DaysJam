@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(ProjectDir)Audio;$(ProjectDir)Base;$(ProjectDir)Camera;$(ProjectDir)FBX;$(ProjectDir)GameScene;$(ProjectDir)Input;$(ProjectDir)Object2D;$(ProjectDir)Object3d;$(ProjectDir)lib\fbx_sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Stage;$(SolutionDir)DirectXTex;$(ProjectDir)Audio;$(ProjectDir)Base;$(ProjectDir)Camera;$(ProjectDir)FBX;$(ProjectDir)GameScene;$(ProjectDir)Input;$(ProjectDir)Object2D;$(ProjectDir)Object3d;$(ProjectDir)lib\fbx_sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Stage;$(SolutionDir)DirectXTex;$(ProjectDir)Audio;$(ProjectDir)Base;$(ProjectDir)Camera;$(ProjectDir)FBX;$(ProjectDir)GameScene;$(ProjectDir)Input;$(ProjectDir)Object2D;$(ProjectDir)Object3d;$(ProjectDir)lib\fbx_sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -172,6 +172,7 @@
     <ClCompile Include="Object3d\Object3d.cpp" />
     <ClCompile Include="Object3d\Player.cpp" />
     <ClCompile Include="Object3d\PlayerBullet.cpp" />
+    <ClCompile Include="Stage\Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -273,6 +274,7 @@
     <ClInclude Include="Object3d\Object3d.h" />
     <ClInclude Include="Object3d\Player.h" />
     <ClInclude Include="Object3d\PlayerBullet.h" />
+    <ClInclude Include="Stage\Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc" />

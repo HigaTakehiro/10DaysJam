@@ -18,6 +18,7 @@
 #include "Collision.h"
 #include "PlayerBullet.h"
 #include <sstream>
+#include "Stage.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
@@ -103,6 +104,13 @@ private: //メンバ変数
 	Vector3 spherePos = { 0, 0, 0 };
 	Vector3 sphereScale = { 10, 10, 10 };
 
+	Model* stageModel = nullptr;
+	//Object3d* stageObj[20] = { nullptr };
+	std::list<std::unique_ptr<Stage>>stages;
+	//Model* stageModel = nullptr;
+	Object3d* wall[2] = { nullptr };
+
+
 	//マップチップ用変数
 	int** map1_a = nullptr;
 	int** map1_b = nullptr;
@@ -120,5 +128,8 @@ private: //メンバ変数
 	bool isTitle;
 	bool isClear;
 	std::stringstream enemyData;
+
+	int intervalTime = 0;
+	int stageClip = 0;
 };
 
