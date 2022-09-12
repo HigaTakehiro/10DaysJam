@@ -114,6 +114,9 @@
     <ClCompile Include="Object3d\EnemyBullet.cpp">
       <Filter>ソース ファイル\Object3d</Filter>
     </ClCompile>
+    <ClCompile Include="Object3d\ParticleManager.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -129,6 +132,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\PostEffectTest.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\Particle.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -161,6 +167,15 @@
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleGS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
@@ -238,6 +253,9 @@
       <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="Object3d\EnemyBullet.h">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3d\ParticleManager.h">
       <Filter>ソース ファイル\Object3d</Filter>
     </ClInclude>
     <ClInclude Include="Base\Easing.h">
