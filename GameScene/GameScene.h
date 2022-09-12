@@ -17,6 +17,8 @@
 #include "Enemy.h"
 #include "Collision.h"
 #include "PlayerBullet.h"
+#include "ParticleManager.h"
+
 #include <sstream>
 #include "Stage.h"
 
@@ -70,6 +72,12 @@ public: //メンバ関数
 	/// </summary>
 	void EnemyDataUpdate();
 
+/// <summary>
+/// パーティクル関連
+/// </summary>
+	void ParticleCoal();
+
+	void ParticleUpdate();
 private: //メンバ関数
 
 	/// <summary>
@@ -128,6 +136,16 @@ private: //メンバ変数
 	bool isTitle;
 	bool isClear;
 	std::stringstream enemyData;
+
+	//パーティクル
+	ParticleManager* particleMan = nullptr;
+	const float PI = 3.1415926f;
+	XMFLOAT3 pos = { 0,0,0 };
+	int PCount = 180;
+	int angle = 30;
+	int radian[360];
+	int fffff = 0;
+	int flag = 1;
 
 	int intervalTime = 0;
 	int stageClip = 0;
