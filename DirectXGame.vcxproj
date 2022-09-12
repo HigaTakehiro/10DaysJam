@@ -250,6 +250,7 @@
   <ItemGroup>
     <ClInclude Include="Audio\Sound.h" />
     <ClInclude Include="Base\DirectXCommon.h" />
+    <ClInclude Include="Base\Easing.h" />
     <ClInclude Include="Base\MatCalc.h" />
     <ClInclude Include="Base\SafeDelete.h" />
     <ClInclude Include="Base\Vector3.h" />

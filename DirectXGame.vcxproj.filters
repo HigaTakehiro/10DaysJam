@@ -240,6 +240,9 @@
     <ClInclude Include="Object3d\EnemyBullet.h">
       <Filter>ソース ファイル\Object3d</Filter>
     </ClInclude>
+    <ClInclude Include="Base\Easing.h">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc">
