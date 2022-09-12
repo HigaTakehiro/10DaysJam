@@ -77,6 +77,13 @@ public: //メンバ関数
 	void ParticleCoal();
 
 	void ParticleUpdate();
+
+/// <summary>
+/// スコア関連
+/// </summary>
+	void ScoreUP();
+	void ScoreDraw();
+
 private: //メンバ関数
 
 	/// <summary>
@@ -138,5 +145,29 @@ private: //メンバ変数
 	int radian[360];
 	int fffff = 0;
 	int flag = 1;
+
+	//スコア
+	Sprite* score1[10];
+	Sprite* score2[10];
+	Sprite* score3[10];
+	Sprite* score4[10];
+	Sprite* score5[10];
+	Sprite* score6[10];
+	Sprite* score7[10];
+	Sprite* score8[10];
+	Sprite* score9[10];
+	int Score = 0;
+	int Score1 = 0;
+	int Score2 = 0;
+	int Score3 = 0;
+	int Score4 = 0;
+	int Score5 = 0;
+	int Score6 = 0;
+	int Score7 = 0;
+	int Score8 = 0;
+	int Score9 = 0;
+	float scoredis = 16;
+	
+
 };
 

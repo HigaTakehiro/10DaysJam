@@ -49,6 +49,40 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(6, L"Resources/Clear.png");
 	clear = Sprite::Create(6, { 0, 0 });
 
+	//Nombers
+	Sprite::LoadTexture(60, L"Resources/Numbers/No0.png");
+	Sprite::LoadTexture(61, L"Resources/Numbers/No1.png");
+	Sprite::LoadTexture(62, L"Resources/Numbers/No2.png");
+	Sprite::LoadTexture(63, L"Resources/Numbers/No3.png");
+	Sprite::LoadTexture(64, L"Resources/Numbers/No4.png");
+	Sprite::LoadTexture(65, L"Resources/Numbers/No5.png");
+	Sprite::LoadTexture(66, L"Resources/Numbers/No6.png");
+	Sprite::LoadTexture(67, L"Resources/Numbers/No7.png");
+	Sprite::LoadTexture(68, L"Resources/Numbers/No8.png");
+	Sprite::LoadTexture(69, L"Resources/Numbers/No9.png");
+	for (int i = 0; i < 10; i++)
+	{
+		score1[i] = Sprite::Create(60 + i, { 0, 0 });
+		score1[i]->SetPosition({ scoredis * 1, 100 });
+		score2[i] = Sprite::Create(60 + i, { 0, 0 });
+		score2[i]->SetPosition({ scoredis * 2, 100 });
+		score3[i] = Sprite::Create(60 + i, { 0, 0 });
+		score3[i]->SetPosition({ scoredis * 3, 100 });
+		score4[i] = Sprite::Create(60 + i, { 0, 0 });
+		score4[i]->SetPosition({ scoredis * 4, 100 });
+		score5[i] = Sprite::Create(60 + i, { 0, 0 });
+		score5[i]->SetPosition({ scoredis * 5, 100 });
+		score6[i] = Sprite::Create(60 + i, { 0, 0 });
+		score6[i]->SetPosition({ scoredis * 6, 100 });
+		score7[i] = Sprite::Create(60 + i, { 0, 0 });
+		score7[i]->SetPosition({ scoredis * 7, 100 });
+		score8[i] = Sprite::Create(60 + i, { 0, 0 });
+		score8[i]->SetPosition({ scoredis * 8, 100 });
+		score9[i] = Sprite::Create(60 + i, { 0, 0 });
+		score9[i]->SetPosition({ scoredis * 9, 100 });
+
+	}
+
 	//Object3d‚Ì‰Šú‰»
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 
@@ -97,7 +131,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	sound->LoadWave("ice1.wav");
 	float a = 0.1;
 	sound->SetVolume("ice1.wav", a);
-	
+
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
@@ -183,7 +217,7 @@ void GameScene::Update() {
 	if (isClear) {
 		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
 			Reset();
-			
+
 		}
 	}
 
@@ -198,6 +232,7 @@ void GameScene::Update() {
 	if (input->PushKey(DIK_4))flag = 4;
 	if (input->PushKey(DIK_5))flag = 5;
 	ParticleUpdate();
+	ScoreUP();
 }
 
 void GameScene::Draw() {
@@ -236,6 +271,7 @@ void GameScene::Draw() {
 	if (isClear) {
 		clear->Draw();
 	}
+	ScoreDraw();
 	debugText.DrawAll(dxCommon->GetCmdList());
 	Sprite::PostDraw();
 
@@ -433,5 +469,86 @@ void GameScene::ParticleUpdate()
 		pos = {};
 	}
 	particleMan->Update();
+
+}
+
+void GameScene::ScoreUP()
+{
+	Score++;
+	if (Score >= 10000)
+	{
+		Score5 = Score / 10000;
+		Score4 = (Score - (Score5 * 10000)) / 1000;
+		Score3 = (Score - (Score5 * 10000) - (Score4 * 1000)) / 100;
+		Score2 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100)) / 10;
+		Score1 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
+
+	}
+	if (Score % 100000 == 0)
+	{
+		Score1++;
+		Score = 0;
+	}
+	if (Score1 % 10 == 0)
+	{
+		Score1 = 0;
+		Score2++;
+	}
+	if (Score2 % 10 == 0)
+	{
+		Score2 = 0;
+		Score3++;
+	}
+	if (Score3 % 10 == 0)
+	{
+		Score3 = 0;
+		Score4++;
+	}
+	if (Score4 % 10 == 0)
+	{
+		Score4 = 0;
+		Score5++;
+	}
+	if (Score5 % 10 == 0)
+	{
+		Score5 = 0;
+		Score6++;
+	}
+	if (Score6 % 10 == 0)
+	{
+		Score6 = 0;
+		Score7++;
+	}
+	if (Score7 % 10 == 0)
+	{
+		Score7 = 0;
+		Score8++;
+	}
+	if (Score8 % 10 == 0)
+	{
+		Score8 = 0;
+		Score9++;
+	}
+	if (Score9 % 10 == 0)
+	{
+		Score9 = 0;
+	}
+}
+
+void GameScene::ScoreDraw()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (Score1 == i)score1[i]->Draw();
+		if (Score2 == i)score2[i]->Draw();
+		if (Score3 == i)score3[i]->Draw();
+		if (Score4 == i)score4[i]->Draw();
+		if (Score5 == i)score5[i]->Draw();
+		if (Score6 == i)score6[i]->Draw();
+		if (Score7 == i)score7[i]->Draw();
+		if (Score8 == i)score8[i]->Draw();
+		if (Score9 == i)score9[i]->Draw();
+
+	}
 
 }
