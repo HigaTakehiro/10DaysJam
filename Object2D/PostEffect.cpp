@@ -15,7 +15,8 @@ PostEffect::PostEffect() : Sprite(
 	{ 1, 1, 1, 1 }, //色
 	{ 0.0f, 0.0f }, //アンカーポイント
 	false,
-	false) 
+	false,
+	1) 
 {
 
 }

@@ -26,6 +26,7 @@ public: //サブクラス
 	struct ConstBufferData {
 		XMFLOAT4 color; // 色 (RGBA)
 		XMMATRIX mat;   // ３Ｄ変換行列
+		float alpha; //アルファ値
 	};
 
 public: //静的メンバ関数
@@ -62,7 +63,7 @@ public: //静的メンバ関数
 	/// <param name="isFlipX">左右反転</param>
 	/// <param name="isFlipY">上下反転</param>
 	/// <returns></returns>
-	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
+	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false, float alpha = 1.0f);
 
 protected: //静的メンバ変数
 	//テクスチャの最大枚数
@@ -96,7 +97,7 @@ public: //メンバ関数
 	/// <param name="anchorpoint">アンカーポイント</param>
 	/// <param name="isFlipX">左右反転</param>
 	/// <param name="isFlipY">上下反転</param>
-	Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+	Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY, float alpha);
 	const XMFLOAT2& GetPosition() { return position; }
 	/// <summary>
 	/// 初期化
@@ -133,6 +134,11 @@ public: //メンバ関数
 	/// </summary>
 	/// <param name="isFlipY">上下反転</param>
 	void SetIsFlipY(bool isFlipY);
+	/// <summary>
+	/// アルファ値の設定
+	/// </summary>
+	/// <param name="alpha"></param>
+	void SetAlpha(float alpha);
 	/// <summary>
 	/// テクスチャ範囲設定
 	/// </summary>
@@ -173,6 +179,8 @@ protected: //メンバ変数
 	XMFLOAT2 texBase = { 0, 0 };
 	// テクスチャサイズ
 	XMFLOAT2 texSize = { 100, 100 };
+	//アルファ値
+	float alpha = 1.0f;
 
 private: //メンバ関数
 	/// <summary>
