@@ -19,6 +19,8 @@
 #include "PlayerBullet.h"
 #include "ParticleManager.h"
 #include"Score.h"
+#include "BackGround.h"
+
 
 #include <sstream>
 #include "Stage.h"
@@ -79,12 +81,6 @@ public: //メンバ関数
 	void ParticleCoal();
 
 	void ParticleUpdate();
-
-///// <summary>
-///// スコア関連
-///// </summary>
-//	void ScoreUP();
-//	void ScoreDraw();
 
 private: //メンバ関数
 
@@ -164,29 +160,15 @@ private: //メンバ変数
 
 	//スコア
 	Score* score = nullptr;
-	/*Sprite* score1[10];
-	Sprite* score2[10];
-	Sprite* score3[10];
-	Sprite* score4[10];
-	Sprite* score5[10];
-	Sprite* score6[10];
-	Sprite* score7[10];
-	Sprite* score8[10];
-	Sprite* score9[10];
-	int Score = 0;
-	int Score1 = 0;
-	int Score2 = 0;
-	int Score3 = 0;
-	int Score4 = 0;
-	int Score5 = 0;
-	int Score6 = 0;
-	int Score7 = 0;
-	int Score8 = 0;
-	int Score9 = 0;
-	float scoredis = 16;
-	float scoreTime = 0.0f;*/
-	
 
+	//背景
+	Model* ModelBackGround = nullptr;
+	Object3d* BackGround1 = nullptr;
+	Object3d* BackGround2 = nullptr;
+	Object3d* BackGround3 = nullptr;
+
+	//背景
+	BackGround* backGroundOBJ = nullptr;
 
 	float maxBoostGauge = 20;
 	float boostGauge = maxBoostGauge;
