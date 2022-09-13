@@ -165,9 +165,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	isTitle = false;
 
 	//sound
-	sound->LoadWave("ice1.wav");
 	float a = 0.05;
-	sound->SetVolume("ice1.wav", a);
 	/*sound->LoadWave("Title.wav");
 	sound->SetVolume("Title.wav", a);
 	sound->PlayWave("Title.wav", true);*/
@@ -337,7 +335,7 @@ void GameScene::Update() {
 	}
 
 	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-		sound->PlayWave("ice1.wav", 0);
+		
 	}
 
 	if (isClear) {
@@ -609,63 +607,3 @@ void GameScene::ParticleUpdate()
 
 }
 
-//void GameScene::ScoreUP()
-//{
-//	scoreTime += 0.005f;
-//	if (scoreTime > 1.0f)
-//	{
-//		scoreTime = 0.0f;
-//		Score++;
-//
-//	}
-//	if (Score >= 10000)
-//	{
-//		Score5 = Score / 10000;
-//		Score4 = (Score - (Score5 * 10000)) / 1000;
-//		Score3 = (Score - (Score5 * 10000) - (Score4 * 1000)) / 100;
-//		Score2 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100)) / 10;
-//		Score1 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
-//	}
-//	if (Score >= 1000&&Score<10000)
-//	{
-//		Score4 = Score / 1000;
-//		Score3 = (Score - (Score4 * 1000)) / 100;
-//		Score2 = (Score - (Score4 * 1000) - (Score3 * 100)) / 10;
-//		Score1 = (Score - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
-//	}
-//	if (Score >= 100 && Score < 1000)
-//	{
-//		Score3 = Score / 100;
-//		Score2 = (Score - (Score3 * 100)) / 10;
-//		Score1 = (Score - (Score3 * 100) - (Score2 * 10));
-//	}
-//	if (Score >= 10 && Score < 100)
-//	{
-//		Score2 = Score / 10;
-//		Score1 = (Score - (Score2 * 10));
-//	}
-//	if (Score < 10)
-//	{
-//		
-//		Score1 = Score;
-//	}
-//
-//}
-//
-//void GameScene::ScoreDraw()
-//{
-//	for (int i = 0; i < 10; i++)
-//	{
-//		if (Score1 == i)score1[i]->Draw();
-//		if (Score2 == i)score2[i]->Draw();
-//		if (Score3 == i)score3[i]->Draw();
-//		if (Score4 == i)score4[i]->Draw();
-//		if (Score5 == i)score5[i]->Draw();
-//	/*	if (Score6 == i)score6[i]->Draw();
-//		if (Score7 == i)score7[i]->Draw();
-//		if (Score8 == i)score8[i]->Draw();
-//		if (Score9 == i)score9[i]->Draw();*/
-//
-//	}
-//
-//}
