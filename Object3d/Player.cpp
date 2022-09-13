@@ -39,6 +39,17 @@ void Player::Update() {
 		if (fallFlag == false) { fallFlag = true; }
 		else { fallFlag = false; }
 	}
+	if (KeyInput::GetIns()->TriggerKey(DIK_B)) {
+		static float alpha = 0.1f;
+		if (alpha + 0.1f <= 1) {
+			alpha += 0.1f;
+		}
+		else {
+			alpha = 0;
+		}
+		aim->SetAlpha(alpha);
+	}
+
 	Move();
 	FreeFall();
 	JumpUpdate();

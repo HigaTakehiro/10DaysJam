@@ -117,6 +117,9 @@
     <ClCompile Include="Object3d\ParticleManager.cpp">
       <Filter>ソース ファイル\Object3d</Filter>
     </ClCompile>
+    <ClCompile Include="Object2D\Score.cpp">
+      <Filter>ソース ファイル\Object2d</Filter>
+    </ClCompile>
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソース ファイル\Object3d</Filter>
     </ClCompile>
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ソース ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Object2D\Score.h">
+      <Filter>ソース ファイル\Object2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
