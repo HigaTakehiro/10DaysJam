@@ -50,7 +50,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	clear = Sprite::Create(6, { 0, 0 });
 
 	//Nombers
-	Sprite::LoadTexture(60, L"Resources/Numbers/No0.png");
+	score = new Score();
+	score->Initialize();
+	/*Sprite::LoadTexture(60, L"Resources/Numbers/No0.png");
 	Sprite::LoadTexture(61, L"Resources/Numbers/No1.png");
 	Sprite::LoadTexture(62, L"Resources/Numbers/No2.png");
 	Sprite::LoadTexture(63, L"Resources/Numbers/No3.png");
@@ -63,25 +65,41 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	for (int i = 0; i < 10; i++)
 	{
 		score1[i] = Sprite::Create(60 + i, { 0, 0 });
-		score1[i]->SetPosition({ scoredis * 1, 100 });
+		score1[i]->SetPosition({ scoredis * 18, 100 });
+		score1[i]->SetSize({ 32,64 });
 		score2[i] = Sprite::Create(60 + i, { 0, 0 });
-		score2[i]->SetPosition({ scoredis * 2, 100 });
-		score3[i] = Sprite::Create(60 + i, { 0, 0 });
-		score3[i]->SetPosition({ scoredis * 3, 100 });
-		score4[i] = Sprite::Create(60 + i, { 0, 0 });
-		score4[i]->SetPosition({ scoredis * 4, 100 });
-		score5[i] = Sprite::Create(60 + i, { 0, 0 });
-		score5[i]->SetPosition({ scoredis * 5, 100 });
-		score6[i] = Sprite::Create(60 + i, { 0, 0 });
-		score6[i]->SetPosition({ scoredis * 6, 100 });
-		score7[i] = Sprite::Create(60 + i, { 0, 0 });
-		score7[i]->SetPosition({ scoredis * 7, 100 });
-		score8[i] = Sprite::Create(60 + i, { 0, 0 });
-		score8[i]->SetPosition({ scoredis * 8, 100 });
-		score9[i] = Sprite::Create(60 + i, { 0, 0 });
-		score9[i]->SetPosition({ scoredis * 9, 100 });
+		score2[i]->SetPosition({ scoredis * 16, 100 });
+		score2[i]->SetSize({ 32,64 });
 
-	}
+		score3[i] = Sprite::Create(60 + i, { 0, 0 });
+		score3[i]->SetPosition({ scoredis * 14, 100 });
+		score3[i]->SetSize({ 32,64 });
+
+		score4[i] = Sprite::Create(60 + i, { 0, 0 });
+		score4[i]->SetPosition({ scoredis * 12, 100 });
+		score4[i]->SetSize({ 32,64 });
+
+		score5[i] = Sprite::Create(60 + i, { 0, 0 });
+		score5[i]->SetPosition({ scoredis * 10, 100 });
+		score5[i]->SetSize({ 32,64 });
+
+		score6[i] = Sprite::Create(60 + i, { 0, 0 });
+		score6[i]->SetPosition({ scoredis * 8, 100 });
+		score6[i]->SetSize({ 32,64 });
+
+		score7[i] = Sprite::Create(60 + i, { 0, 0 });
+		score7[i]->SetPosition({ scoredis * 6, 100 });
+		score7[i]->SetSize({ 32,64 });
+
+		score8[i] = Sprite::Create(60 + i, { 0, 0 });
+		score8[i]->SetPosition({ scoredis * 4, 100 });
+		score8[i]->SetSize({ 32,64 });
+
+		score9[i] = Sprite::Create(60 + i, { 0, 0 });
+		score9[i]->SetPosition({ scoredis * 2, 100 });
+		score9[i]->SetSize({ 32,64 });
+
+	}*/
 
 	//Object3d‚Ì‰Šú‰»
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
@@ -232,7 +250,8 @@ void GameScene::Update() {
 	if (input->PushKey(DIK_4))flag = 4;
 	if (input->PushKey(DIK_5))flag = 5;
 	ParticleUpdate();
-	ScoreUP();
+	score->Update();
+	//ScoreUP();
 }
 
 void GameScene::Draw() {
@@ -271,7 +290,8 @@ void GameScene::Draw() {
 	if (isClear) {
 		clear->Draw();
 	}
-	ScoreDraw();
+	//ScoreDraw();
+	score->Draw();
 	debugText.DrawAll(dxCommon->GetCmdList());
 	Sprite::PostDraw();
 
@@ -472,83 +492,63 @@ void GameScene::ParticleUpdate()
 
 }
 
-void GameScene::ScoreUP()
-{
-	Score++;
-	if (Score >= 10000)
-	{
-		Score5 = Score / 10000;
-		Score4 = (Score - (Score5 * 10000)) / 1000;
-		Score3 = (Score - (Score5 * 10000) - (Score4 * 1000)) / 100;
-		Score2 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100)) / 10;
-		Score1 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
-
-	}
-	if (Score % 100000 == 0)
-	{
-		Score1++;
-		Score = 0;
-	}
-	if (Score1 % 10 == 0)
-	{
-		Score1 = 0;
-		Score2++;
-	}
-	if (Score2 % 10 == 0)
-	{
-		Score2 = 0;
-		Score3++;
-	}
-	if (Score3 % 10 == 0)
-	{
-		Score3 = 0;
-		Score4++;
-	}
-	if (Score4 % 10 == 0)
-	{
-		Score4 = 0;
-		Score5++;
-	}
-	if (Score5 % 10 == 0)
-	{
-		Score5 = 0;
-		Score6++;
-	}
-	if (Score6 % 10 == 0)
-	{
-		Score6 = 0;
-		Score7++;
-	}
-	if (Score7 % 10 == 0)
-	{
-		Score7 = 0;
-		Score8++;
-	}
-	if (Score8 % 10 == 0)
-	{
-		Score8 = 0;
-		Score9++;
-	}
-	if (Score9 % 10 == 0)
-	{
-		Score9 = 0;
-	}
-}
-
-void GameScene::ScoreDraw()
-{
-	for (int i = 0; i < 10; i++)
-	{
-		if (Score1 == i)score1[i]->Draw();
-		if (Score2 == i)score2[i]->Draw();
-		if (Score3 == i)score3[i]->Draw();
-		if (Score4 == i)score4[i]->Draw();
-		if (Score5 == i)score5[i]->Draw();
-		if (Score6 == i)score6[i]->Draw();
-		if (Score7 == i)score7[i]->Draw();
-		if (Score8 == i)score8[i]->Draw();
-		if (Score9 == i)score9[i]->Draw();
-
-	}
-
-}
+//void GameScene::ScoreUP()
+//{
+//	scoreTime += 0.005f;
+//	if (scoreTime > 1.0f)
+//	{
+//		scoreTime = 0.0f;
+//		Score++;
+//
+//	}
+//	if (Score >= 10000)
+//	{
+//		Score5 = Score / 10000;
+//		Score4 = (Score - (Score5 * 10000)) / 1000;
+//		Score3 = (Score - (Score5 * 10000) - (Score4 * 1000)) / 100;
+//		Score2 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100)) / 10;
+//		Score1 = (Score - (Score5 * 10000) - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
+//	}
+//	if (Score >= 1000&&Score<10000)
+//	{
+//		Score4 = Score / 1000;
+//		Score3 = (Score - (Score4 * 1000)) / 100;
+//		Score2 = (Score - (Score4 * 1000) - (Score3 * 100)) / 10;
+//		Score1 = (Score - (Score4 * 1000) - (Score3 * 100) - (Score2 * 10));
+//	}
+//	if (Score >= 100 && Score < 1000)
+//	{
+//		Score3 = Score / 100;
+//		Score2 = (Score - (Score3 * 100)) / 10;
+//		Score1 = (Score - (Score3 * 100) - (Score2 * 10));
+//	}
+//	if (Score >= 10 && Score < 100)
+//	{
+//		Score2 = Score / 10;
+//		Score1 = (Score - (Score2 * 10));
+//	}
+//	if (Score < 10)
+//	{
+//		
+//		Score1 = Score;
+//	}
+//
+//}
+//
+//void GameScene::ScoreDraw()
+//{
+//	for (int i = 0; i < 10; i++)
+//	{
+//		if (Score1 == i)score1[i]->Draw();
+//		if (Score2 == i)score2[i]->Draw();
+//		if (Score3 == i)score3[i]->Draw();
+//		if (Score4 == i)score4[i]->Draw();
+//		if (Score5 == i)score5[i]->Draw();
+//	/*	if (Score6 == i)score6[i]->Draw();
+//		if (Score7 == i)score7[i]->Draw();
+//		if (Score8 == i)score8[i]->Draw();
+//		if (Score9 == i)score9[i]->Draw();*/
+//
+//	}
+//
+//}

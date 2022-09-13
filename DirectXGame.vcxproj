@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(ProjectDir)Audio;$(ProjectDir)Base;$(ProjectDir)Camera;$(ProjectDir)FBX;$(ProjectDir)GameScene;$(ProjectDir)Input;$(ProjectDir)Object2D;$(ProjectDir)Object3d;$(ProjectDir)lib\fbx_sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -153,6 +153,7 @@
     <ClCompile Include="Base\MatCalc.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Object2D\Score.cpp" />
     <ClCompile Include="Object3d\Collision.cpp" />
     <ClCompile Include="Object3d\Enemy.cpp" />
     <ClCompile Include="FBX\FbxLoader.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="Base\Vector3.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Object2D\Score.h" />
     <ClInclude Include="Object3d\Collision.h" />
     <ClInclude Include="Object3d\Enemy.h" />
     <ClInclude Include="FBX\FbxLoader.h" />

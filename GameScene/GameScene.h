@@ -18,6 +18,7 @@
 #include "Collision.h"
 #include "PlayerBullet.h"
 #include "ParticleManager.h"
+#include"Score.h"
 
 #include <sstream>
 
@@ -78,11 +79,11 @@ public: //メンバ関数
 
 	void ParticleUpdate();
 
-/// <summary>
-/// スコア関連
-/// </summary>
-	void ScoreUP();
-	void ScoreDraw();
+///// <summary>
+///// スコア関連
+///// </summary>
+//	void ScoreUP();
+//	void ScoreDraw();
 
 private: //メンバ関数
 
@@ -147,7 +148,8 @@ private: //メンバ変数
 	int flag = 1;
 
 	//スコア
-	Sprite* score1[10];
+	Score* score = nullptr;
+	/*Sprite* score1[10];
 	Sprite* score2[10];
 	Sprite* score3[10];
 	Sprite* score4[10];
@@ -167,6 +169,7 @@ private: //メンバ変数
 	int Score8 = 0;
 	int Score9 = 0;
 	float scoredis = 16;
+	float scoreTime = 0.0f;*/
 	
 
 };
