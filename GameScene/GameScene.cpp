@@ -161,9 +161,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//sound
 	sound->LoadWave("ice1.wav");
-	float a = 0.1;
+	float a = 0.05;
 	sound->SetVolume("ice1.wav", a);
-
+	/*sound->LoadWave("Title.wav");
+	sound->SetVolume("Title.wav", a);
+	sound->PlayWave("Title.wav", true);*/
+	sound->LoadWave("Main.wav");
+	sound->SetVolume("Main.wav", a);
+	sound->PlayWave("Main.wav", true);
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
