@@ -49,6 +49,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(6, L"Resources/Clear.png");
 	clear = Sprite::Create(6, { 0, 0 });
 
+	Sprite::LoadTexture(7, L"Resources/BoostGauge_Back.png");
+	boostBack = Sprite::Create(7, { 0, 0 });
+
+	Sprite::LoadTexture(8, L"Resources/BoostGauge_Frame.png");
+	boostFrame = Sprite::Create(8, { 0, 0 });
+
+	Sprite::LoadTexture(9, L"Resources/BoostGauge_Remain.png");
+	boostRemain = Sprite::Create(9, { 0, 0 });
+
 	//Object3dの初期化
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 
@@ -68,11 +77,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	player->Initialize(camera);
 
 	stageModel = Model::CreateModel("Block");
-	for (int i = 0; i < 20; i++) {
-		//stageObj[i] = Object3d::Create(stageModel);
-		//stageObj[i]->SetPosition({ 0,0,0 });
-		//stageObj[i]->SetScale({ 50,50,50 });
-	}
+	enemyModel = Model::CreateModel("Enemy");
 
 	wall[0] = Object3d::Create(stageModel);
 	wall[0]->SetPosition({ -150,500,0 });
@@ -111,7 +116,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	sound->LoadWave("ice1.wav");
 	float a = 0.1;
 	sound->SetVolume("ice1.wav", a);
-	
+
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
@@ -188,10 +193,10 @@ void GameScene::Update() {
 		//どのタイプを生成するか（）
 		//敵とかぶらないようにする
 		intervalTime--;
-		if (intervalTime < 0) {			
+		if (intervalTime < 0) {
 			int type = rand() % 6;
 			float height = player->GetPlayerPos().y - 50;
-			std::unique_ptr<Stage> newStage = std::make_unique<Stage>();			
+			std::unique_ptr<Stage> newStage = std::make_unique<Stage>();
 			XMFLOAT3 staegepos = { 0,0,0 };
 			switch (type) {
 			case 0:
@@ -220,8 +225,8 @@ void GameScene::Update() {
 				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
 				break;
 			}
-			newStage->Initialize("Block", staegepos, { 0,0,0 }, { 20,20,20 });
-			stages.push_back(std::move(newStage));	
+			newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 20,20,20 });
+			stages.push_back(std::move(newStage));
 			intervalTime = rand() % 100;
 		}
 
@@ -245,6 +250,14 @@ void GameScene::Update() {
 		celetialSphere->Update();
 		ground->Update();
 		player->Update();
+
+		//boostGauge -= 0.01f;		
+		if (KeyInput::GetIns()->PushKey(DIK_Q)) { boostGauge--; }
+		if (KeyInput::GetIns()->PushKey(DIK_E)) { boostGauge++; }
+		float boostNum = (boostRemainWegiht / maxBoostGauge) * player->GetBoostCapacity();
+		boostRemain->SetSize({ boostNum,40 });
+		
+
 		//object1->Update();
 		for (std::unique_ptr<Stage>& stage : stages) {
 			stage->Update();
@@ -323,6 +336,9 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI等)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	player->SpriteDraw();
+	boostBack->Draw();
+	boostRemain->Draw();
+	boostFrame->Draw();
 	if (isTitle) {
 		title->Draw();
 	}
@@ -424,7 +440,7 @@ void GameScene::EnemyDataUpdate() {
 
 		if (isPos && isRot && isScale) {
 			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize("Enemy", pos, rot, scale); //FBXを呼び出す場合はEnemy01を呼び出してください
+			newEnemy->Initialize(enemyModel, pos, rot, scale); //FBXを呼び出す場合はEnemy01を呼び出してください
 			enemies.push_back(std::move(newEnemy));
 		}
 	}

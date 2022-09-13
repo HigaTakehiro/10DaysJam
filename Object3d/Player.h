@@ -94,6 +94,11 @@ public: //メンバ関数
 	/// </summary>
 	void DecelerationBoost();
 
+	/// <summary>
+	/// ブースト容量取得
+	/// </summary>
+	float GetBoostCapacity() { return boostCapacity; }
+
 private: //メンバ関数
 	/// <summary>
 	/// 移動処理
@@ -118,7 +123,7 @@ private: //メンバ関数
 	/// <summary>
 	/// ジャンプ更新処理
 	/// </summary>
-	void JumpUpdate();
+	void JumpUpdate();	
 
 private: //メンバ変数
 	Vector3 playerLPos = { 0, 0, 0 };
@@ -160,7 +165,8 @@ private: //メンバ変数
 	const float boostPower = 2.0f;
 	float boostSpeed = 0.0f;
 	float boostTime = 0.0f;
-
+	const float maxBoostCapacity = 20;
+	float boostCapacity = maxBoostCapacity;
 
 };
 

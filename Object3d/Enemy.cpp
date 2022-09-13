@@ -7,8 +7,8 @@
 
 using namespace std;
 
-void Enemy::Initialize(const std::string& modelName, Vector3 pos, Vector3 rot, Vector3 scale) {
-	enemyModel = Model::CreateModel(modelName);
+void Enemy::Initialize(Model* model, Vector3 pos, Vector3 rot, Vector3 scale) {
+	enemyModel = model;
 	enemy = Object3d::Create(enemyModel);
 	enemy->SetPosition(pos);
 	enemy->SetRotation(rot);

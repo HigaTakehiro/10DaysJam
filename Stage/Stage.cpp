@@ -7,8 +7,8 @@
 
 using namespace std;
 
-void Stage::Initialize(const std::string& modelName, Vector3 pos, Vector3 rot, Vector3 scale) {
-	stageModel = Model::CreateModel(modelName);
+void Stage::Initialize(Model* model, Vector3 pos, Vector3 rot, Vector3 scale) {
+	stageModel = model;
 	stage = Object3d::Create(stageModel);
 	stage->SetPosition(pos);
 	stage->SetRotation(rot);

@@ -102,6 +102,9 @@ private: //ƒƒ“ƒo•Ï”
 	Sprite* title = nullptr;
 	Sprite* gameover = nullptr;
 	Sprite* clear = nullptr;
+	Sprite* boostBack = nullptr;
+	Sprite* boostFrame = nullptr;
+	Sprite* boostRemain = nullptr;
 
 	Model* celestialSphereModel = nullptr;
 	Model* groundModel = nullptr;
@@ -113,6 +116,7 @@ private: //ƒƒ“ƒo•Ï”
 	Vector3 sphereScale = { 10, 10, 10 };
 
 	Model* stageModel = nullptr;
+	Model* enemyModel = nullptr;
 	//Object3d* stageObj[20] = { nullptr };
 	std::list<std::unique_ptr<Stage>>stages;
 	//Model* stageModel = nullptr;
@@ -149,5 +153,9 @@ private: //ƒƒ“ƒo•Ï”
 
 	int intervalTime = 0;
 	int stageClip = 0;
+
+	float maxBoostGauge = 20;
+	float boostGauge = maxBoostGauge;
+	float boostRemainWegiht = 200;
 };
 

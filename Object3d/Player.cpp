@@ -44,7 +44,6 @@ void Player::Update() {
 	JumpUpdate();
 	DecelerationBoost();
 
-	//playerWPos = player->GetMatWorld().r[3];
 
 	AimUpdate();
 
@@ -216,7 +215,8 @@ void Player::StampJump()
 
 void Player::DecelerationBoost()
 {
-	if (KeyInput::GetIns()->PushKey(DIK_RSHIFT)) {
+	if (KeyInput::GetIns()->PushKey(DIK_RSHIFT) && boostCapacity > 0) {
+		boostCapacity -= 0.1f;
 		boostTime += 0.1f;
 		boostSpeed = boostPower * boostTime;
 		if (boostSpeed > 2) { boostSpeed = 2; }

@@ -20,7 +20,7 @@ public: //ƒƒ“ƒoŠÖ”
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void Initialize(const std::string& modelName, Vector3 pos, Vector3 rot, Vector3 scale);
+	void Initialize(Model* model, Vector3 pos, Vector3 rot, Vector3 scale);
 
 	/// <summary>
 	/// XVˆ—
