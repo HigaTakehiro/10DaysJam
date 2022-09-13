@@ -266,7 +266,7 @@ void Sprite::PostDraw() {
 	Sprite::cmdList = nullptr;
 }
 
-Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY) {
+Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY, float alpha) {
 	XMFLOAT2 size = { 100.0f, 100.0f };
 
 	if (texBuff[texNumber]) {
@@ -277,7 +277,7 @@ Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOA
 	}
 
 	//Spriteのインスタンスを生成
-	Sprite* sprite = new Sprite(texNumber, position, size, color, anchorpoint, isFlipX, isFlipY);
+	Sprite* sprite = new Sprite(texNumber, position, size, color, anchorpoint, isFlipX, isFlipY, alpha);
 	if (sprite == nullptr) {
 		return nullptr;
 	}
@@ -292,7 +292,7 @@ Sprite* Sprite::Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, XMFLOA
 	return sprite;
 }
 
-Sprite::Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY) {
+Sprite::Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY, float alpha) {
 	this->position = position;
 	this->size = size;
 	this->anchorpoint = anchorpoint;
@@ -302,6 +302,7 @@ Sprite::Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color,
 	this->isFlipX = isFlipX;
 	this->isFlipY = isFlipY;
 	this->texSize = size;
+	this->alpha = alpha;
 }
 
 bool Sprite::Initialize() {
@@ -346,6 +347,7 @@ bool Sprite::Initialize() {
 	if (SUCCEEDED(result)) {
 		constMap->color = color;
 		constMap->mat = matProjection;
+		constMap->alpha = alpha;
 		constBuff->Unmap(0, nullptr);
 	}
 
@@ -394,6 +396,10 @@ void Sprite::SetIsFlipY(bool isFlipY) {
 	TransferVertices();
 }
 
+void Sprite::SetAlpha(float alpha) {
+	this->alpha = alpha;
+}
+
 void Sprite::SetTextureRect(XMFLOAT2 texBase, XMFLOAT2 texSize) {
 	this->texBase = texBase;
 	this->texSize = texSize;
@@ -416,6 +422,7 @@ void Sprite::Draw() {
 	if (SUCCEEDED(result)) {
 		constMap->mat = matWorld * matProjection;
 		constMap->color = color;
+		constMap->alpha = alpha;
 		this->constBuff->Unmap(0, nullptr);
 	}
 
