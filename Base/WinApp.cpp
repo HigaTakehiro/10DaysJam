@@ -26,7 +26,7 @@ void WinApp::Initialize() {
 
 	// ウィンドウオブジェクトの生成
 	hwnd = CreateWindow(w.lpszClassName, // クラス名
-		L"DirectXGame",         // タイトルバーの文字
+		L"Ready to Fall?",         // タイトルバーの文字
 		windowStyle,        // 標準的なウィンドウスタイル
 		CW_USEDEFAULT,              // 表示X座標（OSに任せる）
 		CW_USEDEFAULT,              // 表示Y座標（OSに任せる）
