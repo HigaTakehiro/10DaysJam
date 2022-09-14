@@ -18,9 +18,9 @@
 #include "Collision.h"
 #include "PlayerBullet.h"
 #include "ParticleManager.h"
-#include"Score.h"
+#include "Score.h"
 #include "BackGround.h"
-
+#include "Easing.h"
 
 #include <sstream>
 #include "Stage.h"
@@ -103,7 +103,11 @@ private: //メンバ変数
 	std::list<std::unique_ptr<Enemy>> enemies;
 	Sprite* sprite = nullptr;
 	Sprite* background = nullptr;
-	Sprite* title = nullptr;
+	Sprite* title1 = nullptr;
+	Sprite* title2 = nullptr;
+	Sprite* title3 = nullptr;
+	Sprite* title4 = nullptr;
+	Sprite* title5 = nullptr;
 	Sprite* gameover = nullptr;
 	Sprite* clear = nullptr;
 	Sprite* boostBack = nullptr;
@@ -125,7 +129,8 @@ private: //メンバ変数
 	std::list<std::unique_ptr<Stage>>stages;
 	//Model* stageModel = nullptr;
 	Object3d* wall[2] = { nullptr };
-
+	Model* holeModel = nullptr;
+	Object3d* hole = nullptr;
 
 	//マップチップ用変数
 	int** map1_a = nullptr;
@@ -134,8 +139,10 @@ private: //メンバ変数
 	std::vector<Object3d*> objects2;
 
 	//FBX用変数
-	FBXModel* model1 = nullptr;
-	FBXObject3d* object1 = nullptr;
+	FBXModel* playerJumpModel = nullptr;
+	FBXObject3d* playerJump = nullptr;
+	FBXModel* playerWaitModel = nullptr;
+	FBXObject3d* playerWait = nullptr;
 
 	//ゲームシーン用変数
 	float aimPosX;
@@ -143,7 +150,16 @@ private: //メンバ変数
 	bool isDead;
 	bool isTitle;
 	bool isClear;
+	bool isStart;
 	std::stringstream enemyData;
+	XMFLOAT2 titlePos1;
+	XMFLOAT2 titlePos2;
+	XMFLOAT2 titlePos3;
+	Vector3 titlePlayerPos;
+	float titleAlpha1;
+	float titleAlpha2;
+	float time;
+	float waitTime;
 
 	//パーティクル
 	ParticleManager* particleMan = nullptr;
