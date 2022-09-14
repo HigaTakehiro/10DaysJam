@@ -125,7 +125,7 @@ private: //ƒƒ“ƒo•Ï”
 	Model* enemyModel = nullptr;
 	//Object3d* stageObj[20] = { nullptr };	
 	//Model* stageModel = nullptr;
-	Object3d* wall[2] = { nullptr };
+	//Object3d* wall[2] = { nullptr };
 	Object3d* stageTest[3] = { nullptr };
 	StageManager* stageManager = nullptr;
 	
