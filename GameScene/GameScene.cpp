@@ -412,9 +412,6 @@ void GameScene::Draw() {
 	BackGround3->Draw();*/
 
 	//celetialSphere->Draw();
-	for (std::unique_ptr<Stage>& stage : stages) {
-		stage->Draw();
-	}
 	for (int i = 0; i < 2; i++) {
 		wall[i]->Draw();
 	}

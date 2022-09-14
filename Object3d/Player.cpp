@@ -147,7 +147,7 @@ void Player::Reset() {
 	playerLPos = { 0, 950, -50 };
 	playerRot = { 0, 0, 0 };
 	fallTime = 0.0f;
-
+	boostCapacity = maxBoostCapacity;
 	player->SetPosition(playerLPos);
 	bullets.clear();
 }
