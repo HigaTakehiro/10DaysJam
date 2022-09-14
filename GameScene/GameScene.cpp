@@ -112,12 +112,31 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageModel = Model::CreateModel("Block");
 	enemyModel = Model::CreateModel("Enemy");
 
+	/*wall = new Wall();
+	wall->Initialize(stageModel, 0);*/
 	wall[0] = Object3d::Create(stageModel);
 	wall[0]->SetPosition({ -150,500,0 });
 	wall[0]->SetScale({ 50,5000,50 });
 	wall[1] = Object3d::Create(stageModel);
 	wall[1]->SetPosition({ 230,500,0 });
 	wall[1]->SetScale({ 50,5000,50 });
+
+	/*wall[0] = Object3d::Create(stageModel);
+	wall[0]->SetPosition({ -120,500,-50 });
+	wall[0]->SetScale({ 40,5000,40 });
+	wall[0]->SetRotation({ 0,-22,0 });
+	wall[1] = Object3d::Create(stageModel);
+	wall[1]->SetPosition({ 200,500,-50 });
+	wall[1]->SetScale({ 40,5000,40 });
+	wall[1]->SetRotation({ 0,288,0 });*/
+	for (int i = 0; i < 3; i++)
+	{
+		stageTest[i] = Object3d::Create(stageModel);
+		stageTest[i]->SetPosition({ -50.0f + 90.0f * i,1000.0f ,-50.0f });
+		stageTest[i]->SetScale({ 90,50,50 });
+	}
+	stageManager = new StageManager;
+	stageManager->Initialize(player, stageModel);
 
 	LoadEnemyData();
 
@@ -170,14 +189,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	sound->PlayWave("Title.wav", true);*/
 	sound->LoadWave("Main.wav");
 	sound->SetVolume("Main.wav", a);
-	sound->PlayWave("Main.wav", true);
+	//sound->PlayWave("Main.wav", true);
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
 
 	//背景
 	backGroundOBJ = new BackGround();
-	backGroundOBJ->Initialize();
+	backGroundOBJ->Initialize(0);
 	/*ModelBackGround = Model::CreateModel("BackGround");
 	BackGround1 = Object3d::Create(ModelBackGround);
 	BackGround1->SetPosition({ 46,0,0 });
@@ -193,7 +212,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 void GameScene::Update() {
 	enemies.remove_if([](std::unique_ptr<Enemy>& enemy) {return enemy->IsDead(); });
 
-	stages.remove_if([](std::unique_ptr<Stage>& stage) {return stage->IsDead(); });
 
 	// DirectX毎フレーム処理　ここから
 	aimPosX = MouseInput::GetIns()->GetMousePoint().x;
@@ -321,9 +339,7 @@ void GameScene::Update() {
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
-		char buck[256];
-		sprintf_s(buck, "Back1y:%f Back2y:%f Back3y:%f", backGroundOBJ->GetPos1(), backGroundOBJ->GetPos2(), backGroundOBJ->GetPos3());
-		debugText.Print(buck, 0, 200, 2.0f);
+	
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
@@ -331,38 +347,77 @@ void GameScene::Update() {
 			if (Collision::GetIns()->OBJSphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
 				if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
 				{
-					player->StampJump();
+					//player->StampJump();
 				}
 			}
 		}
 
+		XMFLOAT3 playerpos = player->GetPlayerPos();
+		if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
+		if (KeyInput::GetIns()->PushKey(DIK_E)) { stageCenter += 10000; }
+		if (KeyInput::GetIns()->PushKey(DIK_Z)) { enemyCenter -= 1; }
+		if (KeyInput::GetIns()->PushKey(DIK_C)) { enemyCenter += 1; }
+
+		if (KeyInput::GetIns()->PushKey(DIK_I)) { stageRad.x -= 1; }
+		if (KeyInput::GetIns()->PushKey(DIK_P)) { stageRad.x += 1; }
+		if (KeyInput::GetIns()->PushKey(DIK_B)) { stageRad.y -= 1; }
+		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }
+
+		for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
+			XMFLOAT3 stagepos = stage->GetStagePos();
+			stagepos.y += stageCenter;
+
+			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60) {
+					if (oldPlayerPos.y > stagepos.y + 10) {
+						/*if (stage->IsTouch() == false){
+						}*/
+						//isDead = true;	//プレイヤーの死亡
+					}
+				}
+				char atatta[256];
+				sprintf_s(atatta, "atata");
+				debugText.Print(atatta, 0, 300, 2.0f);
+				stage->SetTouch();
+			}
+		}
+
+		for (std::unique_ptr<Enemy>& enemy : enemies) {
+			XMFLOAT3 enemypos = enemy->GetEnemyObj()->GetPosition();
+			enemypos.y += enemyCenter;
+			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, enemypos, { 5,5,5 })) {
+				char atatta[256];
+				sprintf_s(atatta, "atata");
+				debugText.Print(atatta, 0, 300, 2.0f);
+			}
+		}
+
 		//生成範囲に入ったら生成
-		//どのタイプを生成するか（）
-		//敵とかぶらないようにする
+			//どのタイプを生成するか（）
+			//敵とかぶらないようにする
 		intervalTime--;
 		if (intervalTime < 0) {
 			int type = rand() % 6;
 			float height = player->GetPlayerPos().y - 50;
-			std::unique_ptr<Stage> newStage = std::make_unique<Stage>();
 			XMFLOAT3 staegepos = { 0,0,0 };
 			switch (type) {
 			case 0:
-				staegepos = { -50,height ,-50 };
+				staegepos = { -40.0f,height ,-50 };
 				break;
 			case 1:
-				staegepos = { 50,height ,-50 };
+				staegepos = { 40,height ,-50 };
 				break;
 			case 2:
-				staegepos = { 150,height ,-50 };
+				staegepos = { 120,height ,-50 };
 				break;
 			case 3:
-				staegepos = { -50,height - 20 ,-50 };
+				staegepos = { -40,height - 20 ,-50 };
 				break;
 			case 4:
-				staegepos = { 50,height - 20,-50 };
+				staegepos = { 40,height - 20,-50 };
 				break;
 			case 5:
-				staegepos = { 150,height - 20,-50 };
+				staegepos = { 120,height - 20,-50 };
 				break;
 			case 6:
 				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
@@ -372,10 +427,16 @@ void GameScene::Update() {
 				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
 				break;
 			}
-			newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 20,20,20 });
-			stages.push_back(std::move(newStage));
+			//std::unique_ptr<Stage> newStage = std::make_unique<Stage>();
+			//newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 85,50,50 });
+			//stages.push_back(std::move(newStage));
+			//std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+			//newEnemy->Initialize(enemyModel, staegepos, { 0,0,0 }, {10,10,50 });
+			//enemies.push_back(std::move(newEnemy));
 			intervalTime = rand() % 100;
 		}
+		stageManager->Update();
+
 
 		EnemyDataUpdate();
 
@@ -398,6 +459,8 @@ void GameScene::Update() {
 		BackGround2->Update();
 		BackGround3->Update();*/
 		celetialSphere->Update();
+		ground->Update();
+		oldPlayerPos = player->GetPlayerPos();
 		player->Update();
 
 		//boostGauge -= 0.01f;		
@@ -408,11 +471,14 @@ void GameScene::Update() {
 		
 
 		//object1->Update();
-		for (std::unique_ptr<Stage>& stage : stages) {
-			stage->Update();
-		}
+		//wall->Update(player->GetPlayerPos().y);
+		wall[0]->SetPosition({ -150,player->GetPlayerPos().y - 400,0 });
+		wall[1]->SetPosition({ 230,player->GetPlayerPos().y - 400,0 });
 		for (int i = 0; i < 2; i++) {
 			wall[i]->Update();
+		}
+		for (int i = 0; i < 3; i++) {
+			stageTest[i]->Update();
 		}
 
 		for (auto object : objects) {
@@ -426,6 +492,8 @@ void GameScene::Update() {
 	if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
+		backGroundOBJ->Initialize(1);
+
 	}
 
 	//if (input->GetIns()->TriggerKey(DIK_SPACE)) {
@@ -480,13 +548,18 @@ void GameScene::Draw() {
 		BackGround2->Draw();
 		BackGround3->Draw();*/
 
-		//celetialSphere->Draw();
-		for (std::unique_ptr<Stage>& stage : stages) {
-			stage->Draw();
-		}
-		for (int i = 0; i < 2; i++) {
-			wall[i]->Draw();
-		}
+	//celetialSphere->Draw();
+	for (int i = 0; i < 2; i++) {
+		wall[i]->Draw();
+	}
+	for (int i = 0; i < 3; i++) {
+		stageTest[i]->Draw();
+	}
+	//stageManager->Draw();
+	for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
+		stage->Draw();
+	}
+	//wall->Draw();
 
 		if (!isDead) {
 			player->ObjectDraw();

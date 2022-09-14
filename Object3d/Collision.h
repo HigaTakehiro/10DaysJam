@@ -21,6 +21,8 @@ public: //Ã“Iƒƒ“ƒoŠÖ”
 
 public: //ƒƒ“ƒoŠÖ”
 
+	bool Collision::BoxCollision(XMFLOAT3 object1, XMFLOAT3 radius1, XMFLOAT3 object2, XMFLOAT3 radius2);
+
 	/// <summary>
 	/// ‹…‚Æ‹…‚Ì“–‚½‚è”»’è(OBJ“¯m)
 	/// </summary>

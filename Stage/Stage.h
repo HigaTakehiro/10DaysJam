@@ -30,6 +30,11 @@ public: //メンバ関数
 	/// </summary>
 	void OnCollision();
 
+	XMFLOAT3 GetStagePos() { return stage->GetPosition(); }
+
+	void SetStagePos(XMFLOAT3 pos) { stage->SetPosition(pos); }
+
+	void SetTouch() { isTouch = true; }
 
 	/// <summary>
 	/// ステージオブジェクト取得
@@ -39,6 +44,10 @@ public: //メンバ関数
 
 	bool IsDead() { return isDead; }
 
+	bool IsTouch() { return isTouch; }
+
+	void SetDead() { isDead = true; }
+
 private: //メンバ変数
 
 	Model* stageModel;
@@ -46,5 +55,6 @@ private: //メンバ変数
 	Vector3 pos;
 	bool isDead;
 	int time = 0;
+	bool isTouch = false;	//プレイヤーと触れたことがあるかどうか
 };
 

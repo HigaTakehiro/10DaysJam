@@ -30,7 +30,7 @@ void Stage::Update() {
 	}
 	time++;
 	if (time > 100)	{
-		isDead = true;
+		//isDead = true;
 	}
 }
 

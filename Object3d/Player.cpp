@@ -115,6 +115,14 @@ void Player::Move() {
 		playerLPos.x += moveSpeed;
 	}
 
+	//•Ç‚ğ’´‚¦‚½‚Æ‚«‚Ì‰Ÿ‚µ–ß‚µˆ—
+	if (playerLPos.x < -92) {
+		playerLPos.x = -92;
+	}
+	if (playerLPos.x > 172) {
+		playerLPos.x = 172;
+	}
+
 	//playerPos.z += autoSpeed;
 	//playerWPos = playerLPos * player->GetMatWorld().r->m128_f32[3];
 
@@ -147,7 +155,7 @@ void Player::Reset() {
 	playerLPos = { 0, 950, -50 };
 	playerRot = { 0, 0, 0 };
 	fallTime = 0.0f;
-
+	boostCapacity = maxBoostCapacity;
 	player->SetPosition(playerLPos);
 	bullets.clear();
 }
@@ -227,7 +235,7 @@ void Player::StampJump()
 
 void Player::DecelerationBoost()
 {
-	if (KeyInput::GetIns()->PushKey(DIK_RSHIFT) && boostCapacity > 0) {
+	if (KeyInput::GetIns()->PushKey(DIK_SPACE) && boostCapacity > 0) {
 		boostCapacity -= 0.1f;
 		boostTime += 0.1f;
 		boostSpeed = boostPower * boostTime;

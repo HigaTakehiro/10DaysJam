@@ -40,6 +40,12 @@
     <Filter Include="ソース ファイル\Object3d">
       <UniqueIdentifier>{ba496a77-61e5-4391-ba80-8710154294fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Object3d\Stage">
+      <UniqueIdentifier>{9d8b59c4-c05d-45b0-948a-afdb7e9fbb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Object3d\Enemy">
+      <UniqueIdentifier>{8fddf332-d802-4ac7-a370-e041a6717a00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Sound.cpp">
@@ -121,10 +127,16 @@
       <Filter>ソース ファイル\Object2d</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Stage.cpp">
-      <Filter>ソース ファイル\Object3d</Filter>
+      <Filter>ソース ファイル\Object3d\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageManager.cpp">
+      <Filter>ソース ファイル\Object3d\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Stage\BackGround.cpp">
       <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3d\Wall.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,14 +282,20 @@
     <ClInclude Include="Base\Easing.h">
       <Filter>ソース ファイル\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\Stage.h">
-      <Filter>ソース ファイル\Object3d</Filter>
-    </ClInclude>
     <ClInclude Include="Object2D\Score.h">
       <Filter>ソース ファイル\Object2d</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>ソース ファイル\Object3d\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageManager.h">
+      <Filter>ソース ファイル\Object3d\Stage</Filter>
+    </ClInclude>
     <ClInclude Include="Stage\BackGround.h">
       <Filter>ソース ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3d\Wall.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
