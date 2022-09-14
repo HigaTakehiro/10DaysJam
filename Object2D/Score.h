@@ -10,6 +10,11 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void ReSet();
+	int GetScore() { return score; }
+
+	void SetPosition(XMFLOAT2 pos);
+	XMFLOAT2 GetPosition() { return pos; }
 
 private:
 	Sprite* Score1[10];
@@ -36,5 +41,6 @@ private:
 	float scoreTime = 0.0f;
 	XMFLOAT2 scoreSize = { 32.0f,64.0f };
 	XMFLOAT2 scoredis[10] = {};
+	XMFLOAT2 pos = { 320.0f,100.0f };
 };
 

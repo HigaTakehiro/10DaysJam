@@ -109,12 +109,12 @@ void Player::Move() {
 	if (KeyInput::GetIns()->PushKey(DIK_S)) {
 		playerLPos.y -= moveSpeed;
 	}
-	if (KeyInput::GetIns()->PushKey(DIK_A)) {
-		playerLPos.x -= moveSpeed;
-	}
-	if (KeyInput::GetIns()->PushKey(DIK_D)) {
-		playerLPos.x += moveSpeed;
-	}
+	//if (KeyInput::GetIns()->PushKey(DIK_A)) {
+	//	playerLPos.x -= moveSpeed;
+	//}
+	//if (KeyInput::GetIns()->PushKey(DIK_D)) {
+	//	playerLPos.x += moveSpeed;
+	//}
 
 	//•Ç‚ğ’´‚¦‚½‚Æ‚«‚Ì‰Ÿ‚µ–ß‚µˆ—
 	if (playerLPos.x < -92) {

@@ -267,7 +267,7 @@ void GameScene::Update() {
 			titlePos3.y = -500.0f;
 			titleAlpha1 = 0.0f;
 			titleAlpha2 = 0.0f;
-			titlePlayerPos = {200.0f, 0.0f, 0.0f};
+			titlePlayerPos = { 200.0f, 0.0f, 0.0f };
 			time = 0.0f;
 			waitTime = 0.0f;
 		}
@@ -345,7 +345,7 @@ void GameScene::Update() {
 				isStart = true;
 			}
 		}
-		
+
 
 		score->Update();
 
@@ -359,11 +359,10 @@ void GameScene::Update() {
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
-	
+
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
-		XMFLOAT3 playerpos = player->GetPlayerPos();
 		if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { stageCenter += 10000; }
 		if (KeyInput::GetIns()->PushKey(DIK_Z)) { enemyCenter -= 1; }
@@ -374,6 +373,38 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_B)) { stageRad.y -= 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }
 
+
+
+		const float moveSpeed = 2.0f;
+		const float autoSpeed = 0.2;
+		XMFLOAT3 playerpos = player->GetPlayerPos();
+		if (KeyInput::GetIns()->PushKey(DIK_A)) {
+			playerpos.x -= moveSpeed;
+			player->SetPlayerPos(playerpos);
+		}
+		for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
+			XMFLOAT3 stagepos = stage->GetStagePos();
+			stagepos.y += stageCenter;
+			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
+					isDead = true;	//ƒvƒŒƒCƒ„[‚ÌŽ€–S
+				}
+				else
+				{
+					playerpos.x += moveSpeed;
+					player->SetPlayerPos(playerpos);
+				}
+				char atatta[256];
+				sprintf_s(atatta, "atata");
+				debugText.Print(atatta, 0, 300, 2.0f);
+				stage->SetTouch();
+			}
+		}
+
+		if (KeyInput::GetIns()->PushKey(DIK_D)) {
+			playerpos.x += moveSpeed;
+			player->SetPlayerPos(playerpos);
+		}
 		for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
 			XMFLOAT3 stagepos = stage->GetStagePos();
 			stagepos.y += stageCenter;
@@ -383,43 +414,16 @@ void GameScene::Update() {
 				}
 				else
 				{
-
+					playerpos.x -= moveSpeed;
+					player->SetPlayerPos(playerpos);
 				}
-
-				/*const float moveSpeed = 2.0f;
-				const float autoSpeed = 0.2;
-				XMFLOAT3 playerpos = player->GetPlayerPos();*/
-				//if (KeyInput::GetIns()->PushKey(DIK_W)) {
-				//	playerpos.y += moveSpeed;
-				//	player->SetPlayerPos(playerpos);
-				//}
-				//if (KeyInput::GetIns()->PushKey(DIK_S)) {
-				//	playerpos.y -= moveSpeed;
-				//	player->SetPlayerPos(playerpos);
-				//}
-				//if (KeyInput::GetIns()->PushKey(DIK_A)) {
-				//	playerpos.x -= moveSpeed;
-				//	player->SetPlayerPos(playerpos);
-				//	if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				//		playerpos.x += moveSpeed;
-				//		player->SetPlayerPos(playerpos);
-				//	}
-				//}
-				//if (KeyInput::GetIns()->PushKey(DIK_D)) {
-				//	playerpos.x += moveSpeed;
-				//	player->SetPlayerPos(playerpos);
-				//	if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				//		playerpos.x -= moveSpeed;
-				//		player->SetPlayerPos(playerpos);
-				//	}
-				//}
-
 				char atatta[256];
 				sprintf_s(atatta, "atata");
 				debugText.Print(atatta, 0, 300, 2.0f);
 				stage->SetTouch();
 			}
 		}
+
 
 		for (std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
 			XMFLOAT3 enemypos = enemy->GetEnemyFbx()->GetPosition();
@@ -634,6 +638,9 @@ void GameScene::Reset() {
 	isDead = false;
 	isClear = false;
 	//isTitle = true;
+	enemyManager->ListClear();
+	stageManager->ListClear();
+	score->ReSet();
 
 	LoadEnemyData();
 }

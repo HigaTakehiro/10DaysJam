@@ -93,3 +93,8 @@ void EnemyManager::Draw(DirectXCommon* dxCommon)
 		enemy->Draw(dxCommon);
 	}
 }
+
+void EnemyManager::ListClear()
+{
+	enemies.clear();
+}

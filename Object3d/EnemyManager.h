@@ -11,11 +11,13 @@
 class EnemyManager
 {
 public:
-	void Initialize(Player* player, Model* enemyModel,FBXModel* fbxEnemyModel);
+	void Initialize(Player* player, Model* enemyModel, FBXModel* fbxEnemyModel);
 	void Update();
 	void Draw(DirectXCommon* dxCommon);
 
 	std::list<std::unique_ptr<Enemy>>& GetEnemies() { return enemies; }
+
+	void ListClear();
 
 private:
 	Model* enemyModel = nullptr;

@@ -16,6 +16,8 @@ public:
 
 	std::list<std::unique_ptr<Stage>>& GetStages() { return stages; }
 
+	void ListClear(){ stages.clear(); }
+
 private:
 	Model* stageModel = nullptr;
 	Player* player = nullptr;

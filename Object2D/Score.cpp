@@ -14,7 +14,7 @@ void Score::Initialize()
 	Sprite::LoadTexture(69, L"Resources/Numbers/No9.png");
 	for (int i = 0; i < 10; i++)
 	{
-		scoredis[i] = { 320.0f - (32.0f * i),100.0f };
+		scoredis[i] = { pos.x - (32.0f * i),pos.y };
 	}
 	for (int i = 0; i < 10; i++)
 	{
@@ -118,5 +118,34 @@ void Score::Draw()
 		if (score8 == i)Score8[i]->Draw();
 		if (score9 == i)Score9[i]->Draw();*/
 
+	}
+}
+
+void Score::ReSet()
+{
+	scoreTime = 0.0f;
+	score = 0;
+}
+
+void Score::SetPosition(XMFLOAT2 pos)
+{
+	this->pos = pos;
+
+	for (int i = 0; i < 10; i++)
+	{
+		scoredis[i] = { pos.x - (32.0f * i),pos.y };
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		Score1[i]->SetPosition(scoredis[0]);
+		Score2[i]->SetPosition(scoredis[1]);
+		Score3[i]->SetPosition(scoredis[2]);
+		Score4[i]->SetPosition(scoredis[3]);
+		Score5[i]->SetPosition(scoredis[4]);
+		Score6[i]->SetPosition(scoredis[5]);
+		Score7[i]->SetPosition(scoredis[6]);
+		Score8[i]->SetPosition(scoredis[7]);
+		Score9[i]->SetPosition(scoredis[8]);
+		Score10[i]->SetPosition(scoredis[9]);
 	}
 }
