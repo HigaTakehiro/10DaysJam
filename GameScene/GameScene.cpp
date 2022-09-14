@@ -350,8 +350,8 @@ void GameScene::Update() {
 
 		//object1->Update();
 		//wall->Update(player->GetPlayerPos().y);
-		wall[0]->SetPosition({ -150,player->GetPlayerPos().y-400,0 });
-		wall[1]->SetPosition({ 230,player->GetPlayerPos().y-400,0 });
+		wall[0]->SetPosition({ -150,player->GetPlayerPos().y - 400,0 });
+		wall[1]->SetPosition({ 230,player->GetPlayerPos().y - 400,0 });
 		for (int i = 0; i < 2; i++) {
 			wall[i]->Update();
 		}
