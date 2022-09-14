@@ -37,11 +37,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//Sprite::LoadTexture(1, L"Resources/Aim.png");
 	//sprite = Sprite::Create(1, { 0, 0 });
-	Sprite::LoadTexture(2, L"Resources/background.png");
+	Sprite::LoadTexture(2, L"Resources/TitleBackTex.png");
 	background = Sprite::Create(2, { 0, 0 });
 
-	Sprite::LoadTexture(4, L"Resources/Title.png");
-	title = Sprite::Create(4, { 0, 0 });
+	//Sprite::LoadTexture(4, L"Resources/Title.png");
+	//title = Sprite::Create(4, { 0, 0 });
 
 	Sprite::LoadTexture(5, L"Resources/Gameover.png");
 	gameover = Sprite::Create(5, { 0, 0 });
@@ -63,15 +63,52 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(9, L"Resources/BoostGauge_Remain.png");
 	boostRemain = Sprite::Create(9, { 0, 0 });
 
+	Sprite::LoadTexture(10, L"Resources/Title1.png");
+	titlePos1 = { 90.0f, -500.0f };
+	title1 = Sprite::Create(10, titlePos1);
+
+	Sprite::LoadTexture(11, L"Resources/Title2.png");
+	titlePos2 = { 340.0f, -500.0f };
+	title2 = Sprite::Create(11, titlePos2);
+
+	Sprite::LoadTexture(12, L"Resources/Title3.png");
+	titlePos3 = { 590.0f, -500.0f };
+	title3 = Sprite::Create(12, { 590, 100 });
+
+	Sprite::LoadTexture(13, L"Resources/Title4.png");
+	titleAlpha1 = 0.0f;
+	title4 = Sprite::Create(13, { 360, 400 });
+
+	Sprite::LoadTexture(14, L"Resources/Title5.png");
+	titleAlpha2 = 0.0f;
+	title5 = Sprite::Create(14, { 360, 500 });
+
+	Sprite::LoadTexture(15, L"Resources/LeftArrow.png");
+	leftArrow = Sprite::Create(15, { 420, 200 });
+
+	Sprite::LoadTexture(16, L"Resources/RightArrow.png");
+	rightArrow = Sprite::Create(16, { 720, 200 });
+
+	Sprite::LoadTexture(17, L"Resources/SpaceKey.png");
+	space = Sprite::Create(17, { 580, 500 });
+
+	time = 0.0f;
+	waitTime = 0.0f;
+
 	//Object3dの初期化
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 
-	groundModel = Model::CreateModel("ground");
+	groundModel = Model::CreateModel("Block");
 	ground = Object3d::Create(groundModel);
-	groundPos = { 0, -50, 0 };
+	groundPos = { 0, -70, 0 };
 	ground->SetPosition(groundPos);
-	groundScale = { 10, 10, 10 };
+	groundScale = { 1500, 10, 1500 };
 	ground->SetScale(groundScale);
+
+	holeModel = Model::CreateModel("Hole");
+	hole = Object3d::Create(holeModel);
+	hole->SetPosition(Vector3(0.0f, -105.0f, 0.0f));
+	hole->SetScale(Vector3(25.0f, 10.0f, 25.0f));
 
 	celestialSphereModel = Model::CreateModel("CelestialSphere");
 	celetialSphere = Object3d::Create(celestialSphereModel);
@@ -84,21 +121,23 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageModel = Model::CreateModel("Block");
 	enemyModel = Model::CreateModel("Enemy");
 
-	//wall[0] = Object3d::Create(stageModel);
-	//wall[0]->SetPosition({ -150,500,0 });
-	//wall[0]->SetScale({ 50,5000,50 });
-	//wall[1] = Object3d::Create(stageModel);
-	//wall[1]->SetPosition({ 230,500,0 });
-	//wall[1]->SetScale({ 50,5000,50 });
-
+	/*wall = new Wall();
+	wall->Initialize(stageModel, 0);*/
 	wall[0] = Object3d::Create(stageModel);
+	wall[0]->SetPosition({ -150,500,0 });
+	wall[0]->SetScale({ 50,5000,50 });
+	wall[1] = Object3d::Create(stageModel);
+	wall[1]->SetPosition({ 230,500,0 });
+	wall[1]->SetScale({ 50,5000,50 });
+
+	/*wall[0] = Object3d::Create(stageModel);
 	wall[0]->SetPosition({ -120,500,-50 });
 	wall[0]->SetScale({ 40,5000,40 });
 	wall[0]->SetRotation({ 0,-22,0 });
 	wall[1] = Object3d::Create(stageModel);
 	wall[1]->SetPosition({ 200,500,-50 });
 	wall[1]->SetScale({ 40,5000,40 });
-	wall[1]->SetRotation({ 0,288,0 });
+	wall[1]->SetRotation({ 0,288,0 });*/
 	for (int i = 0; i < 3; i++)
 	{
 		stageTest[i] = Object3d::Create(stageModel);
@@ -134,9 +173,28 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	object1->SetModel(model1);
 	object1->SetScale({ 0.1f, 0.1f, 0.1f });
 	object1->PlayAnimation();*/
+	playerJumpModel = FbxLoader::GetInstance()->LoadModelFromFile("Player_Jump");
+	playerJump = new FBXObject3d;
+	playerJump->Initialize();
+	playerJump->SetModel(playerJumpModel);
+	playerJump->SetScale({ 0.1f, 0.1f, 0.1f });
+	playerJump->SetRotation({ 0.0f, 225.0f, 0.0f });
+	titlePlayerPos = { 200.0f, 0.0f, 0.0f };
+	playerJump->SetPosition(titlePlayerPos);
+
+	playerWaitModel = FbxLoader::GetInstance()->LoadModelFromFile("Player_Wait");
+	playerWait = new FBXObject3d;
+	playerWait->Initialize();
+	playerWait->SetModel(playerWaitModel);
+	playerWait->SetRotation({ 0.0f, 225.0f, 0.0f });
+	playerWait->SetScale({ 0.1f, 0.1f, 0.1f });
+	playerWait->SetPosition({ 200.0f, 0.0f, 0.0f });
+	playerWait->PlayAnimation();
 
 	isDead = false;
 	isClear = false;
+	isTitle = true;
+	isStart = false;
 	isTitle = true;
 
 	//sound
@@ -153,7 +211,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//背景
 	backGroundOBJ = new BackGround();
-	backGroundOBJ->Initialize();
+	backGroundOBJ->Initialize(0);
 	/*ModelBackGround = Model::CreateModel("BackGround");
 	BackGround1 = Object3d::Create(ModelBackGround);
 	BackGround1->SetPosition({ 46,0,0 });
@@ -173,11 +231,101 @@ void GameScene::Update() {
 	aimPosX = MouseInput::GetIns()->GetMousePoint().x;
 	aimPosY = MouseInput::GetIns()->GetMousePoint().y;
 
+	if (input->PushKey(DIK_RIGHT)) {
+		camera->CameraMoveEyeVector({ +2.0f, 0.0f, 0.0f });
+	}
+	if (input->PushKey(DIK_LEFT)) {
+		camera->CameraMoveEyeVector({ -2.0f, 0.0f, 0.0f });
+	}
+	if (input->PushKey(DIK_UP)) {
+		camera->CameraMoveEyeVector({ 0.0f, 0.0f, +2.0f });
+	}
+	if (input->PushKey(DIK_DOWN)) {
+		camera->CameraMoveEyeVector({ 0.0f, 0.0f, -2.0f });
+	}
+	if (input->PushKey(DIK_Q)) {
+		camera->CameraMoveEyeVector({ 0.0f, +2.0f, 0.0f });
+	}
+	if (input->PushKey(DIK_E)) {
+		camera->CameraMoveEyeVector({ 0.0f, -2.0f, 0.0f });
+	}
+
 	if (isTitle) {
-		camera->SetEye({ 50, 1, -700 });
-		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-			isTitle = false;
+		const float maxTime1 = 20.0f;
+		const float maxTime2 = 40.0f;
+		const float maxTime3 = 60.0f;
+		const float maxTime4 = 100.0f;
+		const float maxPosY = 100.0f;
+		const float maxAlpha = 1.0f;
+
+		//camera->SetEye(XMFLOAT3(50, 1, -700));
+
+		if (input->GetIns()->TriggerKey(DIK_R)) {
+			isStart = false;
+			titlePos1.y = -500.0f;
+			titlePos2.y = -500.0f;
+			titlePos3.y = -500.0f;
+			titleAlpha1 = 0.0f;
+			titleAlpha2 = 0.0f;
+			titlePlayerPos = {200.0f, 0.0f, 0.0f};
+			time = 0.0f;
+			waitTime = 0.0f;
 		}
+
+		if (!isStart) {
+			time++;
+		}
+		titlePos1.y = Easing::GetIns()->easeIn(time, maxTime1, maxPosY, titlePos1.y);
+		titlePos2.y = Easing::GetIns()->easeIn(time, maxTime2, maxPosY, titlePos2.y);
+		titlePos3.y = Easing::GetIns()->easeIn(time, maxTime3, maxPosY, titlePos3.y);
+		titleAlpha1 = Easing::GetIns()->easeIn(time, maxTime3, maxAlpha, titleAlpha1);
+		titleAlpha2 = Easing::GetIns()->easeIn(time, maxTime3, maxAlpha, titleAlpha2);
+
+		title1->SetPosition(titlePos1);
+		title2->SetPosition(titlePos2);
+		title3->SetPosition(titlePos3);
+		title4->SetAlpha(titleAlpha1);
+		title5->SetAlpha(titleAlpha2);
+
+		if (!isStart && !playerWait->GetIsAnimation()) {
+			playerWait->PlayAnimation();
+		}
+		if (input->GetIns()->TriggerKey(DIK_SPACE) && !isStart) {
+			isStart = true;
+			playerWait->StopAnimation();
+			playerJump->PlayAnimation(false);
+		}
+		if (isStart) {
+			const float timeOver = 50.0f;
+			const float maxPosY = 150.0f;
+			float jumpSpeed = 10.0f;
+			waitTime++;
+			if (waitTime >= timeOver && titlePlayerPos.y <= maxPosY) {
+				titlePlayerPos.x -= jumpSpeed;
+				titlePlayerPos.y += jumpSpeed;
+			}
+			if (titlePlayerPos.x <= 50.0f) {
+				titlePlayerPos.y -= 40.0f;
+			}
+			playerJump->SetPosition(titlePlayerPos);
+			if (titlePlayerPos.y <= -500.0f) {
+				isStart = false;
+				isTitle = false;
+				titlePos1.y = -500.0f;
+				titlePos2.y = -500.0f;
+				titlePos3.y = -500.0f;
+				titleAlpha1 = 0.0f;
+				titleAlpha2 = 0.0f;
+				titlePlayerPos = { 200.0f, 0.0f, 0.0f };
+				time = 0.0f;
+				waitTime = 0.0f;
+			}
+		}
+
+		playerJump->Update();
+		playerWait->Update();
+		ground->Update();
+		hole->Update();
 	}
 
 	if (!isTitle && !isClear && !isDead) {
@@ -190,27 +338,16 @@ void GameScene::Update() {
 		//targetpos.y = eyepos.y;
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
-		//camera->SetEye({ 50, 1, -300 });
+		//camera->SetEye(XMFLOAT3(50, 1, -300));
 
+		if (!isStart) {
+			if (player->GetPlayerPos().y <= -300.0f || input->GetIns()->TriggerKey(DIK_SPACE)) {
+				isStart = true;
+			}
+		}
+		
 
-		if (input->PushKey(DIK_RIGHT)) {
-			camera->CameraMoveEyeVector({ +2.0f, 0.0f, 0.0f });
-		}
-		if (input->PushKey(DIK_LEFT)) {
-			camera->CameraMoveEyeVector({ -2.0f, 0.0f, 0.0f });
-		}
-		if (input->PushKey(DIK_UP)) {
-			camera->CameraMoveEyeVector({ 0.0f, 0.0f, +2.0f });
-		}
-		if (input->PushKey(DIK_DOWN)) {
-			camera->CameraMoveEyeVector({ 0.0f, 0.0f, -2.0f });
-		}
-		if (input->PushKey(DIK_Q)) {
-			camera->CameraMoveEyeVector({ 0.0f, +2.0f, 0.0f });
-		}
-		if (input->PushKey(DIK_E)) {
-			camera->CameraMoveEyeVector({ 0.0f, -2.0f, 0.0f });
-		}
+		score->Update();
 
 		char xPos[256];
 		char yPos[256];
@@ -222,9 +359,7 @@ void GameScene::Update() {
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
-		char buck[256];
-		sprintf_s(buck, "Back1y:%f Back2y:%f Back3y:%f", backGroundOBJ->GetPos1(), backGroundOBJ->GetPos2(), backGroundOBJ->GetPos3());
-		debugText.Print(buck, 0, 200, 2.0f);
+	
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
@@ -337,6 +472,9 @@ void GameScene::Update() {
 
 
 		//object1->Update();
+		//wall->Update(player->GetPlayerPos().y);
+		wall[0]->SetPosition({ -150,player->GetPlayerPos().y - 400,0 });
+		wall[1]->SetPosition({ 230,player->GetPlayerPos().y - 400,0 });
 		for (int i = 0; i < 2; i++) {
 			wall[i]->Update();
 		}
@@ -355,31 +493,32 @@ void GameScene::Update() {
 	if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
-	}
-
-	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+		backGroundOBJ->Initialize(1);
 
 	}
 
-	if (isClear) {
-		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-			Reset();
+	//if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+	//	
+	//}
 
-		}
-	}
+	//if (isClear) {
+	//	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+	//		Reset();
 
-	if (isDead) {
-		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-			Reset();
-		}
-	}
+	//	}
+	//}
+
+	//if (isDead) {
+	//	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
+	//		Reset();
+	//	}
+	//}
 	if (input->PushKey(DIK_1))flag = 1;
 	if (input->PushKey(DIK_2))flag = 2;
 	if (input->PushKey(DIK_3))flag = 3;
 	if (input->PushKey(DIK_4))flag = 4;
 	if (input->PushKey(DIK_5))flag = 5;
 	ParticleUpdate();
-	score->Update();
 	//ScoreUP();
 }
 
@@ -388,16 +527,27 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(背景)
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//background->Draw();
+	background->Draw();
 	Sprite::PostDraw();
 
 	//3Dオブジェクト描画処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	//ground->Draw();
-	backGroundOBJ->Draw();
-	/*BackGround1->Draw();
-	BackGround2->Draw();
-	BackGround3->Draw();*/
+	if (isTitle) {
+		ground->Draw();
+		hole->Draw();
+		if (isStart) {
+			playerJump->Draw(dxCommon->GetCmdList());
+		}
+		else {
+			playerWait->Draw(dxCommon->GetCmdList());
+		}
+
+	}
+	if (!isTitle) {
+		backGroundOBJ->Draw();
+		/*BackGround1->Draw();
+		BackGround2->Draw();
+		BackGround3->Draw();*/
 
 	//celetialSphere->Draw();
 	for (int i = 0; i < 2; i++) {
@@ -427,21 +577,34 @@ void GameScene::Draw() {
 	ParticleManager::PostDraw();
 	//スプライト描画処理(UI等)
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	player->SpriteDraw();
-	boostBack->Draw();
-	boostRemain->Draw();
-	boostFrame->Draw();
+	if (!isTitle) {
+		player->SpriteDraw();
+		boostBack->Draw();
+		boostRemain->Draw();
+		boostFrame->Draw();
+		score->Draw();
+		if (!isStart) {
+			space->Draw();
+			rightArrow->Draw();
+			leftArrow->Draw();
+		}
+	}
 	if (isTitle) {
-		title->Draw();
+		if (!isStart) {
+			title1->Draw();
+			title2->Draw();
+			title3->Draw();
+			title4->Draw();
+			title5->Draw();
+		}
 	}
 	if (isDead) {
-		gameover->Draw();
+		//gameover->Draw();
 	}
 	if (isClear) {
-		clear->Draw();
+		//clear->Draw();
 	}
 	//ScoreDraw();
-	score->Draw();
 	debugText.DrawAll(dxCommon->GetCmdList());
 	Sprite::PostDraw();
 
@@ -620,19 +783,19 @@ void GameScene::ParticleCoal()
 
 void GameScene::ParticleUpdate()
 {
-	if (input->TriggerKey(DIK_R))
-	{
-		if (flag == 1)particleMan->PBustr(angle, pos);
-		if (flag == 2)particleMan->PArts(angle, pos);
-		if (flag == 3)particleMan->PQuik(angle, pos);
-		if (flag == 4)particleMan->All(angle, pos);
-		if (flag == 5)
-		{
-			angle++;
-			ParticleCoal();
-			pos.y = (rand() % 10) + 1;
-		}
-	}
+	//if (input->TriggerKey(DIK_R))
+	//{
+	//	if (flag == 1)particleMan->PBustr(angle, pos);
+	//	if (flag == 2)particleMan->PArts(angle, pos);
+	//	if (flag == 3)particleMan->PQuik(angle, pos);
+	//	if (flag == 4)particleMan->All(angle, pos);
+	//	if (flag == 5)
+	//	{
+	//		angle++;
+	//		ParticleCoal();
+	//		pos.y = (rand() % 10) + 1;
+	//	}
+	//}
 	if (input->TriggerKey(DIK_Q))
 	{
 		angle = 0;

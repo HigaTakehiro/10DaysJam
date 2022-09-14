@@ -268,9 +268,11 @@ void FBXObject3d::Update() {
 	if (isPlay) {
 		//1フレーム進める
 		currentTime += frameTime;
-		//最後まで再生したら最初に戻す
+		//最後まで再生したら最初に戻す(ループ再生の場合)
 		if (currentTime > endTime) {
-			currentTime = startTime;
+			if (isLoop) {
+				currentTime = startTime;
+			}
 			//アニメーションをループさせないなら停止する
 			if (!isLoop) {
 				isPlay = false;
