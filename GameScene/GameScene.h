@@ -101,6 +101,8 @@ private: //メンバ変数
 	Camera* camera = nullptr;
 	MapChip* mapchip = nullptr;
 
+	bool soundFlag = 0;
+
 	//ゲームオブジェクト & スプライト
 	Player* player = nullptr;
 	Sprite* sprite = nullptr;

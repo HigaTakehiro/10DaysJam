@@ -204,12 +204,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	isTitle = true;
 
 	//sound
-	float a = 0.01;
-	/*sound->LoadWave("Title.wav");
+	float a = 0.1;
+	sound->LoadWave("Title.wav");
 	sound->SetVolume("Title.wav", a);
-	sound->PlayWave("Title.wav", true);*/
+	sound->PlayWave("Title.wav", true);
 	sound->LoadWave("Main.wav");
-	sound->SetVolume("Main.wav", a);
+	sound->SetVolume("Main.wav", 0.1);
+	sound->LoadWave("SE_.wav");
+	sound->SetVolume("SE_.wav", 0.5);
 	//sound->PlayWave("Main.wav", true);
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
@@ -297,11 +299,17 @@ void GameScene::Update(bool* isEnd) {
 			playerWait->PlayAnimation();
 		}
 		if (input->GetIns()->TriggerKey(DIK_SPACE) && !isStart) {
-			isStart = true;
+			
 			playerWait->StopAnimation();
 			playerJump->PlayAnimation(false);
+			isStart = true;
 		}
 		if (isStart) {
+			if (soundFlag == 0)
+			{
+				sound->Stop("Title.wav");
+				soundFlag = 1;
+			}
 			const float timeOver = 50.0f;
 			const float maxPosY = 150.0f;
 			float jumpSpeed = 10.0f;
@@ -345,6 +353,8 @@ void GameScene::Update(bool* isEnd) {
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
 		//camera->SetEye(XMFLOAT3(50, 1, -300));
+		sound->PlayWave("Main.wav", true);
+
 
 		if (!isStart) {
 			if (player->GetPlayerPos().y <= -300.0f || input->GetIns()->TriggerKey(DIK_SPACE)) {
@@ -415,6 +425,8 @@ void GameScene::Update(bool* isEnd) {
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
 				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
 					isDead = true;	//プレイヤーの死亡
+					sound->PlayWave("SE_.wav", 0);
+
 				}
 				else
 				{
@@ -434,6 +446,7 @@ void GameScene::Update(bool* isEnd) {
 			enemypos.y += enemyCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, enemypos, { 5,5,5 })) {
 				if (oldPlayerPos.x > enemypos.x - 20 && oldPlayerPos.x < enemypos.x + 20 && oldPlayerPos.y > enemypos.y + 10) {
+					sound->PlayWave("SE_.wav",0);
 					player->StampJump();
 					enemy->SetDead();
 				}
