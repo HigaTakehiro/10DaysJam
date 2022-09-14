@@ -21,7 +21,7 @@
 #include"Score.h"
 #include "BackGround.h"
 #include "StageManager.h"
-
+#include "EnemyManager.h"
 
 #include <sstream>
 #include "Stage.h"
@@ -101,7 +101,6 @@ private: //メンバ変数
 
 	//ゲームオブジェクト & スプライト
 	Player* player = nullptr;
-	std::list<std::unique_ptr<Enemy>> enemies;
 	Sprite* sprite = nullptr;
 	Sprite* background = nullptr;
 	Sprite* title = nullptr;
@@ -127,7 +126,7 @@ private: //メンバ変数
 	Object3d* wall[2] = { nullptr };
 	Object3d* stageTest[3] = { nullptr };
 	StageManager* stageManager = nullptr;
-
+	EnemyManager* enemyManager = nullptr;
 
 	//マップチップ用変数
 	int** map1_a = nullptr;

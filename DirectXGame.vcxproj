@@ -169,6 +169,7 @@
     <ClCompile Include="Object2D\PostEffect.cpp" />
     <ClCompile Include="Object2D\Sprite.cpp" />
     <ClCompile Include="Object3d\EnemyBullet.cpp" />
+    <ClCompile Include="Object3d\EnemyManager.cpp" />
     <ClCompile Include="Object3d\MapChip.cpp" />
     <ClCompile Include="Object3d\Model.cpp" />
     <ClCompile Include="Object3d\Object3d.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Object2D\PostEffect.h" />
     <ClInclude Include="Object2D\Sprite.h" />
     <ClInclude Include="Object3d\EnemyBullet.h" />
+    <ClInclude Include="Object3d\EnemyManager.h" />
     <ClInclude Include="Object3d\MapChip.h" />
     <ClInclude Include="Object3d\Model.h" />
     <ClInclude Include="Object3d\Object3d.h" />

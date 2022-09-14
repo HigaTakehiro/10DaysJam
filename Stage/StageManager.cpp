@@ -19,7 +19,7 @@ void StageManager::Update()
 	if (num3 > 300/*&& stageNum <10*/)
 	{
 		stageNum++;
-		int type = rand() % 3 + 3;
+		int type = rand() % 6;
 		float height = player->GetPlayerPos().y - 200;
 		height -= 100;
 		XMFLOAT3 staegepos = { 0,0,0 };

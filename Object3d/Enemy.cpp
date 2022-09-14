@@ -25,7 +25,27 @@ void Enemy::Initialize(Model* model, Vector3 pos, Vector3 rot, Vector3 scale) {
 }
 
 void Enemy::Update() {
-	if (enemy != nullptr) {
+	if (enemy != nullptr) {		
+		XMFLOAT3 pos = enemy->GetPosition();
+		if (direction == 0) {			
+			pos.x -= speed;
+			enemy->SetPosition(pos);
+			if (enemy->GetPosition().x < -92) {
+				pos.x = -92;
+				enemy->SetPosition(pos);
+				direction = 1;
+			}
+		}
+		else if (direction == 1) {
+			pos.x += speed;
+			enemy->SetPosition(pos);
+			if (enemy->GetPosition().x > 172) {
+				pos.x = 172;
+				enemy->SetPosition(pos);
+				direction = 0;
+			}
+		}
+
 		enemy->Update();
 	}
 }

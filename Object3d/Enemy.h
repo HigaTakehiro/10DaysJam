@@ -43,6 +43,8 @@ public: //メンバ関数
 	/// <returns>敵の状態</returns>
 	bool IsDead() const { return isDead; }
 
+	void SetDead() { isDead = true; }
+
 	/// <summary>
 	/// 敵オブジェクト取得
 	/// </summary>
@@ -57,5 +59,8 @@ private: //メンバ変数
 	FBXModel* testEnemyModel;
 	Vector3 pos;
 	bool isDead;
+	float speed = 1;;
+
+	int direction = 0;
 };
 

@@ -108,6 +108,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageManager = new StageManager;
 	stageManager->Initialize(player, stageModel);
 
+	enemyManager = new EnemyManager;
+	enemyManager->Initialize(player, enemyModel);
+
 	LoadEnemyData();
 
 	//MapChipの初期化
@@ -162,7 +165,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 }
 
 void GameScene::Update() {
-	enemies.remove_if([](std::unique_ptr<Enemy>& enemy) {return enemy->IsDead(); });
 
 
 	// DirectX毎フレーム処理　ここから
@@ -221,14 +223,14 @@ void GameScene::Update() {
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
-		for (const std::unique_ptr<Enemy>& enemy : enemies) {
-			if (Collision::GetIns()->OBJSphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
-				if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
-				{
-					//player->StampJump();
-				}
-			}
-		}
+		//for (const std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
+		//	if (Collision::GetIns()->OBJSphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
+		//		if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
+		//		{
+		//			//player->StampJump();
+		//		}
+		//	}
+		//}
 
 		XMFLOAT3 playerpos = player->GetPlayerPos();
 		if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
@@ -260,10 +262,27 @@ void GameScene::Update() {
 			}
 		}
 
-		for (std::unique_ptr<Enemy>& enemy : enemies) {
+		int a = 1, b = 6, c = 3;
+		if (a == 1) {
+			if (b == 2) {
+				int y = 500;
+			}
+		}
+		else {
+			int g = 4444;
+		}
+
+		for (std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
 			XMFLOAT3 enemypos = enemy->GetEnemyObj()->GetPosition();
 			enemypos.y += enemyCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, enemypos, { 5,5,5 })) {
+				if (oldPlayerPos.x > enemypos.x - 20 && oldPlayerPos.x < enemypos.x + 20 && oldPlayerPos.y > enemypos.y + 10) {
+					player->StampJump();
+					enemy->SetDead();
+				}
+				else{
+					isDead = true;
+				}
 				char atatta[256];
 				sprintf_s(atatta, "atata");
 				debugText.Print(atatta, 0, 300, 2.0f);
@@ -273,58 +292,12 @@ void GameScene::Update() {
 		//生成範囲に入ったら生成
 			//どのタイプを生成するか（）
 			//敵とかぶらないようにする
-		intervalTime--;
-		if (intervalTime < 0) {
-			int type = rand() % 6;
-			float height = player->GetPlayerPos().y - 50;
-			XMFLOAT3 staegepos = { 0,0,0 };
-			switch (type) {
-			case 0:
-				staegepos = { -40.0f,height ,-50 };
-				break;
-			case 1:
-				staegepos = { 40,height ,-50 };
-				break;
-			case 2:
-				staegepos = { 120,height ,-50 };
-				break;
-			case 3:
-				staegepos = { -40,height - 20 ,-50 };
-				break;
-			case 4:
-				staegepos = { 40,height - 20,-50 };
-				break;
-			case 5:
-				staegepos = { 120,height - 20,-50 };
-				break;
-			case 6:
-				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
-				break;
-			case 7:
-				//何もでてこないタイプ
-				//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
-				break;
-			}
-			//std::unique_ptr<Stage> newStage = std::make_unique<Stage>();
-			//newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 85,50,50 });
-			//stages.push_back(std::move(newStage));
-			//std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			//newEnemy->Initialize(enemyModel, staegepos, { 0,0,0 }, {10,10,50 });
-			//enemies.push_back(std::move(newEnemy));
-			intervalTime = rand() % 100;
-		}
 		stageManager->Update();
-
+		enemyManager->Update();
 
 		EnemyDataUpdate();
 
-		if (enemies.empty()) {
-			isClear = true;
-		}
 
-		for (std::unique_ptr<Enemy>& enemy : enemies) {
-			enemy->Update();
-		}
 
 		XMFLOAT3 eyepos = camera->GetEye();
 		eyepos.y = player->GetPlayerPos().y;
@@ -346,7 +319,7 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { boostGauge++; }
 		float boostNum = (boostRemainWegiht / maxBoostGauge) * player->GetBoostCapacity();
 		boostRemain->SetSize({ boostNum,40 });
-		
+
 
 		//object1->Update();
 		for (int i = 0; i < 2; i++) {
@@ -370,7 +343,7 @@ void GameScene::Update() {
 	}
 
 	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-		
+
 	}
 
 	if (isClear) {
@@ -422,11 +395,14 @@ void GameScene::Draw() {
 	for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
 		stage->Draw();
 	}
+	for (std::unique_ptr<Enemy>& stage : enemyManager->GetEnemies()) {
+		stage->Draw(dxCommon);
+	}
 
 	if (!isDead) {
 		player->ObjectDraw();
 	}
-	for (std::unique_ptr<Enemy>& enemy : enemies) {
+	for (std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
 		enemy->Draw(dxCommon);
 	}
 	//object1->Draw(dxCommon->GetCmdList());
@@ -484,69 +460,69 @@ void GameScene::Reset() {
 }
 
 void GameScene::LoadEnemyData() {
-	//ファイルストリーム
-	std::ifstream file;
-	enemyData.str("");
-	enemyData.clear(std::stringstream::goodbit);
-	enemies.clear();
+	////ファイルストリーム
+	//std::ifstream file;
+	//enemyData.str("");
+	//enemyData.clear(std::stringstream::goodbit);
+	//enemies.clear();
 
-	const std::string filename = "EnemySet.aid";
-	const std::string directory = "Resources/";
-	file.open(directory + filename);
-	if (file.fail()) {
-		assert(0);
-	}
+	//const std::string filename = "EnemySet.aid";
+	//const std::string directory = "Resources/";
+	//file.open(directory + filename);
+	//if (file.fail()) {
+	//	assert(0);
+	//}
 
-	enemyData << file.rdbuf();
+	//enemyData << file.rdbuf();
 
-	file.close();
+	//file.close();
 }
 
 void GameScene::EnemyDataUpdate() {
-	std::string line;
-	Vector3 pos{};
-	Vector3 rot{};
-	Vector3 scale{};
-	bool isPos = false;
-	bool isRot = false;
-	bool isScale = false;
+	//std::string line;
+	//Vector3 pos{};
+	//Vector3 rot{};
+	//Vector3 scale{};
+	//bool isPos = false;
+	//bool isRot = false;
+	//bool isScale = false;
 
-	while (getline(enemyData, line)) {
-		std::istringstream line_stream(line);
-		std::string word;
-		//半角区切りで文字列を取得
-		getline(line_stream, word, ' ');
-		if (word == "#") {
-			continue;
-		}
-		if (word == "Pos") {
-			//Vector3 pos{};
-			line_stream >> pos.x;
-			line_stream >> pos.y;
-			line_stream >> pos.z;
-			isPos = true;
-		}
-		if (word == "Rot") {
-			//Vector3 rot{};
-			line_stream >> rot.x;
-			line_stream >> rot.y;
-			line_stream >> rot.z;
-			isRot = true;
-		}
-		if (word == "Scale") {
-			//Vector3 scale{};
-			line_stream >> scale.x;
-			line_stream >> scale.y;
-			line_stream >> scale.z;
-			isScale = true;
-		}
+	//while (getline(enemyData, line)) {
+	//	std::istringstream line_stream(line);
+	//	std::string word;
+	//	//半角区切りで文字列を取得
+	//	getline(line_stream, word, ' ');
+	//	if (word == "#") {
+	//		continue;
+	//	}
+	//	if (word == "Pos") {
+	//		//Vector3 pos{};
+	//		line_stream >> pos.x;
+	//		line_stream >> pos.y;
+	//		line_stream >> pos.z;
+	//		isPos = true;
+	//	}
+	//	if (word == "Rot") {
+	//		//Vector3 rot{};
+	//		line_stream >> rot.x;
+	//		line_stream >> rot.y;
+	//		line_stream >> rot.z;
+	//		isRot = true;
+	//	}
+	//	if (word == "Scale") {
+	//		//Vector3 scale{};
+	//		line_stream >> scale.x;
+	//		line_stream >> scale.y;
+	//		line_stream >> scale.z;
+	//		isScale = true;
+	//	}
 
-		if (isPos && isRot && isScale) {
-			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-			newEnemy->Initialize(enemyModel, pos, rot, scale); //FBXを呼び出す場合はEnemy01を呼び出してください
-			enemies.push_back(std::move(newEnemy));
-		}
-	}
+	//	if (isPos && isRot && isScale) {
+	//		std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+	//		newEnemy->Initialize(enemyModel, pos, rot, scale); //FBXを呼び出す場合はEnemy01を呼び出してください
+	//		enemies.push_back(std::move(newEnemy));
+	//	}
+	//}
 }
 
 void GameScene::ParticleCoal()
