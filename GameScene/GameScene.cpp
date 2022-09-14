@@ -452,6 +452,8 @@ void GameScene::Update(bool* isEnd) {
 				}
 				else {
 					isDead = true;
+					sound->PlayWave("SE_.wav", 0);
+
 				}
 				char atatta[256];
 				sprintf_s(atatta, "atata");
@@ -558,7 +560,6 @@ void GameScene::Update(bool* isEnd) {
 		else if (pick && input->GetIns()->TriggerKey(DIK_SPACE)) {
 			*isEnd = true;
 		}
-
 	}
 
 	if (input->PushKey(DIK_1))flag = 1;
