@@ -115,6 +115,9 @@ private: //ƒƒ“ƒo•Ï”
 	Sprite* boostBack = nullptr;
 	Sprite* boostFrame = nullptr;
 	Sprite* boostRemain = nullptr;
+	Sprite* leftArrow = nullptr;
+	Sprite* rightArrow = nullptr;
+	Sprite* space = nullptr;
 
 	Model* celestialSphereModel = nullptr;
 	Model* groundModel = nullptr;

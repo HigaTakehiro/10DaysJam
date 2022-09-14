@@ -26,7 +26,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//カメラ初期化
 	camera = new Camera;
-	camera->SetEye(XMFLOAT3(50, 1, -700));
+	camera->SetEye(XMFLOAT3(50, 1, -300));
 	camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	//Sprite & DebugTextの初期化
@@ -82,6 +82,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(14, L"Resources/Title5.png");
 	titleAlpha2 = 0.0f;
 	title5 = Sprite::Create(14, { 360, 500 });
+
+	Sprite::LoadTexture(15, L"Resources/LeftArrow.png");
+	leftArrow = Sprite::Create(15, { 420, 200 });
+
+	Sprite::LoadTexture(16, L"Resources/RightArrow.png");
+	rightArrow = Sprite::Create(16, { 720, 200 });
+
+	Sprite::LoadTexture(17, L"Resources/SpaceKey.png");
+	space = Sprite::Create(17, { 580, 500 });
 
 	time = 0.0f;
 	waitTime = 0.0f;
@@ -324,8 +333,14 @@ void GameScene::Update() {
 		//targetpos.y = eyepos.y;
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
-		camera->SetEye(XMFLOAT3(50, 1, -300));
+		//camera->SetEye(XMFLOAT3(50, 1, -300));
 
+		if (!isStart) {
+			if (player->GetPlayerPos().y <= -300.0f || input->GetIns()->TriggerKey(DIK_SPACE)) {
+				isStart = true;
+			}
+		}
+		
 
 		score->Update();
 
@@ -450,6 +465,7 @@ void GameScene::Update() {
 
 		XMFLOAT3 eyepos = camera->GetEye();
 		eyepos.y = player->GetPlayerPos().y;
+		eyepos.z = -300.0f;
 		camera->SetEye(eyepos);
 		XMFLOAT3 targetpos = camera->GetTarget();
 		targetpos.y = player->GetPlayerPos().y;
@@ -581,6 +597,11 @@ void GameScene::Draw() {
 		boostRemain->Draw();
 		boostFrame->Draw();
 		score->Draw();
+		if (!isStart) {
+			space->Draw();
+			rightArrow->Draw();
+			leftArrow->Draw();
+		}
 	}
 	if (isTitle) {
 		if (!isStart) {
