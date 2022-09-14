@@ -253,7 +253,7 @@ void GameScene::Update() {
 		const float maxPosY = 100.0f;
 		const float maxAlpha = 1.0f;
 
-		camera->SetEye(XMFLOAT3(50, 1, -700));
+		//camera->SetEye(XMFLOAT3(50, 1, -700));
 
 		if (input->GetIns()->TriggerKey(DIK_R)) {
 			isStart = false;
