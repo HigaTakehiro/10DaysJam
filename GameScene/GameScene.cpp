@@ -84,14 +84,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageModel = Model::CreateModel("Block");
 	enemyModel = Model::CreateModel("Enemy");
 
-	wall = new Wall();
-	wall->Initialize(stageModel, 0);
-	//wall[0] = Object3d::Create(stageModel);
-	//wall[0]->SetPosition({ -150,500,0 });
-	//wall[0]->SetScale({ 50,5000,50 });
-	//wall[1] = Object3d::Create(stageModel);
-	//wall[1]->SetPosition({ 230,500,0 });
-	//wall[1]->SetScale({ 50,5000,50 });
+	/*wall = new Wall();
+	wall->Initialize(stageModel, 0);*/
+	wall[0] = Object3d::Create(stageModel);
+	wall[0]->SetPosition({ -150,500,0 });
+	wall[0]->SetScale({ 50,5000,50 });
+	wall[1] = Object3d::Create(stageModel);
+	wall[1]->SetPosition({ 230,500,0 });
+	wall[1]->SetScale({ 50,5000,50 });
 
 	/*wall[0] = Object3d::Create(stageModel);
 	wall[0]->SetPosition({ -120,500,-50 });
@@ -349,11 +349,12 @@ void GameScene::Update() {
 		
 
 		//object1->Update();
-		wall->Update(player->GetPlayerPos().y);
-
-		/*for (int i = 0; i < 2; i++) {
+		//wall->Update(player->GetPlayerPos().y);
+		wall[0]->SetPosition({ -150,player->GetPlayerPos().y-400,0 });
+		wall[1]->SetPosition({ 230,player->GetPlayerPos().y-400,0 });
+		for (int i = 0; i < 2; i++) {
 			wall[i]->Update();
-		}*/
+		}
 		for (int i = 0; i < 3; i++) {
 			stageTest[i]->Update();
 		}
@@ -416,9 +417,9 @@ void GameScene::Draw() {
 	BackGround3->Draw();*/
 
 	//celetialSphere->Draw();
-	/*for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		wall[i]->Draw();
-	}*/
+	}
 	for (int i = 0; i < 3; i++) {
 		stageTest[i]->Draw();
 	}
@@ -426,7 +427,7 @@ void GameScene::Draw() {
 	for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
 		stage->Draw();
 	}
-	wall->Draw();
+	//wall->Draw();
 
 	if (!isDead) {
 		player->ObjectDraw();
