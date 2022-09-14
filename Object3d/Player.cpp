@@ -100,7 +100,7 @@ void Player::Update() {
 }
 
 void Player::SpriteDraw() {
-	aim->Draw();
+	//aim->Draw();
 }
 
 void Player::ObjectDraw() {
