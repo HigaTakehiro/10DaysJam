@@ -26,7 +26,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//カメラ初期化
 	camera = new Camera;
-	camera->SetEye(XMFLOAT3(50, 1, -700));
+	camera->SetEye(XMFLOAT3(50, 1, -300));
 	camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	//Sprite & DebugTextの初期化
@@ -244,7 +244,7 @@ void GameScene::Update() {
 		const float maxPosY = 100.0f;
 		const float maxAlpha = 1.0f;
 
-		camera->SetEye(XMFLOAT3(50, 1, -700));
+		//camera->SetEye(XMFLOAT3(50, 1, -700));
 
 		if (input->GetIns()->TriggerKey(DIK_R)) {
 			isStart = false;
@@ -324,7 +324,7 @@ void GameScene::Update() {
 		//targetpos.y = eyepos.y;
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
-		camera->SetEye(XMFLOAT3(50, 1, -300));
+		//camera->SetEye(XMFLOAT3(50, 1, -300));
 
 
 		score->Update();
