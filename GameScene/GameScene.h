@@ -20,6 +20,7 @@
 #include "ParticleManager.h"
 #include"Score.h"
 #include "BackGround.h"
+#include "Wall.h"
 
 
 #include <sstream>
@@ -124,7 +125,8 @@ private: //メンバ変数
 	//Object3d* stageObj[20] = { nullptr };
 	std::list<std::unique_ptr<Stage>>stages;
 	//Model* stageModel = nullptr;
-	Object3d* wall[2] = { nullptr };
+	
+	Wall* wall = nullptr;
 
 
 	//マップチップ用変数

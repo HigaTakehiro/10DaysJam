@@ -84,12 +84,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageModel = Model::CreateModel("Block");
 	enemyModel = Model::CreateModel("Enemy");
 
-	wall[0] = Object3d::Create(stageModel);
-	wall[0]->SetPosition({ -150,500,0 });
-	wall[0]->SetScale({ 50,5000,50 });
-	wall[1] = Object3d::Create(stageModel);
-	wall[1]->SetPosition({ 230,500,0 });
-	wall[1]->SetScale({ 50,5000,50 });
+	wall = new Wall();
+	wall->Initialize(stageModel, 0);
 
 	LoadEnemyData();
 
@@ -131,7 +127,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	//”wŒi
 	backGroundOBJ = new BackGround();
-	backGroundOBJ->Initialize();
+	backGroundOBJ->Initialize(0);
 	/*ModelBackGround = Model::CreateModel("BackGround");
 	BackGround1 = Object3d::Create(ModelBackGround);
 	BackGround1->SetPosition({ 46,0,0 });
@@ -199,9 +195,7 @@ void GameScene::Update() {
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
-		char buck[256];
-		sprintf_s(buck, "Back1y:%f Back2y:%f Back3y:%f", backGroundOBJ->GetPos1(), backGroundOBJ->GetPos2(), backGroundOBJ->GetPos3());
-		debugText.Print(buck, 0, 200, 2.0f);
+	
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
@@ -290,9 +284,8 @@ void GameScene::Update() {
 		for (std::unique_ptr<Stage>& stage : stages) {
 			stage->Update();
 		}
-		for (int i = 0; i < 2; i++) {
-			wall[i]->Update();
-		}
+		wall->Update(player->GetPlayerPos().y);
+
 
 		for (auto object : objects) {
 			object->Update();
@@ -305,6 +298,8 @@ void GameScene::Update() {
 	if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
+		backGroundOBJ->Initialize(1);
+
 	}
 
 	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
@@ -353,9 +348,7 @@ void GameScene::Draw() {
 	for (std::unique_ptr<Stage>& stage : stages) {
 		stage->Draw();
 	}
-	for (int i = 0; i < 2; i++) {
-		wall[i]->Draw();
-	}
+	wall->Draw();
 
 	if (!isDead) {
 		player->ObjectDraw();
