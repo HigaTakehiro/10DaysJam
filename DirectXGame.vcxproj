@@ -175,6 +175,7 @@
     <ClCompile Include="Object3d\ParticleManager.cpp" />
     <ClCompile Include="Object3d\Player.cpp" />
     <ClCompile Include="Object3d\PlayerBullet.cpp" />
+    <ClCompile Include="Object3d\Wall.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Stage\StageManager.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Object3d\ParticleManager.h" />
     <ClInclude Include="Object3d\Player.h" />
     <ClInclude Include="Object3d\PlayerBullet.h" />
+    <ClInclude Include="Object3d\Wall.h" />
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Stage\StageManager.h" />

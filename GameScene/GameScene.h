@@ -20,6 +20,7 @@
 #include "ParticleManager.h"
 #include"Score.h"
 #include "BackGround.h"
+#include "Wall.h"
 #include "StageManager.h"
 
 
@@ -127,6 +128,8 @@ private: //メンバ変数
 	Object3d* wall[2] = { nullptr };
 	Object3d* stageTest[3] = { nullptr };
 	StageManager* stageManager = nullptr;
+	
+	Wall* wall = nullptr;
 
 
 	//マップチップ用変数
