@@ -102,8 +102,8 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	for (int i = 0; i < 3; i++)
 	{
 		stageTest[i] = Object3d::Create(stageModel);
-		stageTest[i]->SetPosition({ -40.0f + 80.0f * i,1000.0f ,-50.0f });
-		stageTest[i]->SetScale({ 85,50,50 });
+		stageTest[i]->SetPosition({ -50.0f + 90.0f * i,1000.0f ,-50.0f });
+		stageTest[i]->SetScale({ 90,50,50 });
 	}
 	stageManager = new StageManager;
 	stageManager->Initialize(player, stageModel);

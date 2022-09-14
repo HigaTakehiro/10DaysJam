@@ -16,16 +16,17 @@ void StageManager::Update()
 	float num2 = fabs(player->GetPlayerPos().y);
 	float num3 = num1 - num2;
 	num3 = fabs(num3);
-	if (num3 > 200/*&& stageNum <10*/)
+	if (num3 > 300/*&& stageNum <10*/)
 	{
 		stageNum++;
-		int type = rand() % 6;
-		float height = player->GetPlayerPos().y - 50;
+		int type = rand() % 3 + 3;
+		float height = player->GetPlayerPos().y - 200;
 		height -= 100;
 		XMFLOAT3 staegepos = { 0,0,0 };
+		XMFLOAT3 staegepos2 = { 0,0,0 };
 		switch (type) {
 		case 0:
-			staegepos = { -40.0f,height ,-50 };
+			staegepos = { -50.0f,height ,-50 };
 			break;
 		case 1:
 			staegepos = { 40,height ,-50 };
@@ -34,13 +35,16 @@ void StageManager::Update()
 			staegepos = { 120,height ,-50 };
 			break;
 		case 3:
-			staegepos = { -40,height - 20 ,-50 };
+			staegepos = { -50,height - 20 ,-50 };
+			staegepos2 = { 40,height - 20 ,-50 };
 			break;
 		case 4:
 			staegepos = { 40,height - 20,-50 };
+			staegepos2 = { 120,height - 20,-50 };
 			break;
 		case 5:
-			staegepos = { 120,height - 20,-50 };
+			staegepos = { -50,height - 20,-50 };
+			staegepos2 = { 120,height - 20,-50 };
 			break;
 		case 6:
 			//stageObj[stageClip]->SetPosition({ -50,height ,-50 });
@@ -52,8 +56,13 @@ void StageManager::Update()
 		}
 		//地面をゲームシーンに追加
 		std::unique_ptr<Stage> newStage = std::make_unique<Stage>();
-		newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 85,50,50 });
+		newStage->Initialize(stageModel, staegepos, { 0,0,0 }, { 90,50,50 });
 		stages.push_back(std::move(newStage));
+		if (type == 3 || type == 4 || type == 5) {
+			std::unique_ptr<Stage> newStage2 = std::make_unique<Stage>();
+			newStage2->Initialize(stageModel, staegepos2, { 0,0,0 }, { 90,50,50 });
+			stages.push_back(std::move(newStage2));
+		}
 
 		playerOldPos = player->GetPlayerPos();
 	}
@@ -65,7 +74,7 @@ void StageManager::Update()
 		num2 = fabs(player->GetPlayerPos().y);
 		num3 = num1 - num2;
 		num3 = fabs(num3);
-		if (num3 > 400){
+		if (num3 > 400) {
 			stage->SetDead();
 		}
 	}

@@ -43,6 +43,9 @@
     <Filter Include="ソース ファイル\Object3d\Stage">
       <UniqueIdentifier>{9d8b59c4-c05d-45b0-948a-afdb7e9fbb6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Object3d\Enemy">
+      <UniqueIdentifier>{8fddf332-d802-4ac7-a370-e041a6717a00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Sound.cpp">

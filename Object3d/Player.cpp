@@ -115,6 +115,14 @@ void Player::Move() {
 		playerLPos.x += moveSpeed;
 	}
 
+	//•Ç‚ğ’´‚¦‚½‚Æ‚«‚Ì‰Ÿ‚µ–ß‚µˆ—
+	if (playerLPos.x < -92) {
+		playerLPos.x = -92;
+	}
+	if (playerLPos.x > 172) {
+		playerLPos.x = 172;
+	}
+
 	//playerPos.z += autoSpeed;
 	//playerWPos = playerLPos * player->GetMatWorld().r->m128_f32[3];
 
