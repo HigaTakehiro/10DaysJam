@@ -129,6 +129,9 @@
     <ClCompile Include="Stage\StageManager.cpp">
       <Filter>ソース ファイル\Object3d\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\BackGround.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -281,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="Stage\StageManager.h">
       <Filter>ソース ファイル\Object3d\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\BackGround.h">
+      <Filter>ソース ファイル\Object3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

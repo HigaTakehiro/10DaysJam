@@ -196,6 +196,7 @@ void Player::FreeFall()
 		fallSpeed = gravity * fallTime * fallTime / 3;
 		if (fallSpeed > 4) { fallSpeed = 4.0f; }
 		playerLPos.y -= fallSpeed;
+		//playerLPos.y = 0.0f;
 		player->SetPosition(playerLPos);
 	}
 }
