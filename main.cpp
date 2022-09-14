@@ -60,6 +60,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	while (true)  // ゲームループ
 	{
+		bool isEnd;
 		if (winApp->ProcessMessage()) {
 			break;
 		}
@@ -71,7 +72,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		KeyInput::GetIns()->Update();
 		MouseInput::GetIns()->Update();
 		PadInput::GetIns()->Update();
-		gameScene->Update();
+		gameScene->Update(&isEnd);
+		if (isEnd == true) {
+			break;
+		}
 
 		// DirectX毎フレーム処理　ここまで
 		// ４．描画コマンドここから

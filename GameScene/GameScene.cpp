@@ -92,6 +92,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(17, L"Resources/SpaceKey.png");
 	space = Sprite::Create(17, { 580, 500 });
 
+	Sprite::LoadTexture(18, L"Resources/Retry.png");
+	retry = Sprite::Create(18, { 0, 500 });
+
+	Sprite::LoadTexture(19, L"Resources/End.png");
+	end = Sprite::Create(19, { 700, 500 });
+
 	time = 0.0f;
 	waitTime = 0.0f;
 
@@ -192,18 +198,20 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	playerWait->PlayAnimation();
 
 	isDead = false;
-	isClear = false;	
+	isClear = false;
 	isStart = false;
-	isTitle = false;
+	isTitle = true;
 
 	//sound
-	float a = 0.01;
-	/*sound->LoadWave("Title.wav");
+	float a = 0.1;
+	sound->LoadWave("Title.wav");
 	sound->SetVolume("Title.wav", a);
-	sound->PlayWave("Title.wav", true);*/
+	sound->PlayWave("Title.wav", true);
 	sound->LoadWave("Main.wav");
-	sound->SetVolume("Main.wav", a);
-	//sound->PlayWave("Main.wav", true);
+	sound->SetVolume("Main.wav", 0.1);
+	sound->LoadWave("SE_.wav");
+	sound->SetVolume("SE_.wav", 0.5);
+	sound->PlayWave("Main.wav", true);
 	//Particle
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
@@ -221,10 +229,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	BackGround3 = Object3d::Create(ModelBackGround);
 	BackGround3->SetPosition({ 46,+800,0 });
 	BackGround3->SetScale({ 4,4,4 });*/
-	oldBoostRemen = boostRemain->GetPosition();	
+	oldBoostRemen = boostRemain->GetPosition();
 }
 
-void GameScene::Update() {
+void GameScene::Update(bool* isEnd) {
 	boostRemain->SetPosition(oldBoostRemen);
 
 	// DirectX毎フレーム処理　ここから
@@ -272,11 +280,17 @@ void GameScene::Update() {
 			playerWait->PlayAnimation();
 		}
 		if (input->GetIns()->TriggerKey(DIK_SPACE) && !isStart) {
-			isStart = true;
+
 			playerWait->StopAnimation();
 			playerJump->PlayAnimation(false);
+			isStart = true;
 		}
 		if (isStart) {
+			if (soundFlag == 0)
+			{
+				sound->Stop("Title.wav");
+				soundFlag = 1;
+			}
 			const float timeOver = 50.0f;
 			const float maxPosY = 150.0f;
 			float jumpSpeed = 10.0f;
@@ -320,6 +334,8 @@ void GameScene::Update() {
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
 		//camera->SetEye(XMFLOAT3(50, 1, -300));
+		sound->PlayWave("Main.wav", true);
+
 
 		if (!isStart) {
 			if (player->GetPlayerPos().y <= -300.0f || input->GetIns()->TriggerKey(DIK_SPACE)) {
@@ -354,12 +370,10 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_B)) { stageRad.y -= 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }*/
 
-
-
 		const float moveSpeed = 2.0f;
 		const float autoSpeed = 0.2;
 		XMFLOAT3 playerpos = player->GetPlayerPos();
-		if (KeyInput::GetIns()->PushKey(DIK_A)|| KeyInput::GetIns()->PushKey(DIK_LEFT)) {
+		if (KeyInput::GetIns()->PushKey(DIK_A) || KeyInput::GetIns()->PushKey(DIK_LEFT)) {
 			playerpos.x -= moveSpeed;
 			player->SetPlayerPos(playerpos);
 		}
@@ -390,27 +404,32 @@ void GameScene::Update() {
 			XMFLOAT3 stagepos = stage->GetStagePos();
 			stagepos.y += stageCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 30) {
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
 					isDead = true;	//プレイヤーの死亡
+					sound->PlayWave("SE_.wav", 0);
+
+					if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 30) {
+						isDead = true;	//プレイヤーの死亡
+					}
+					else
+					{
+						playerpos.x -= moveSpeed;
+						player->SetPlayerPos(playerpos);
+					}
+					char atatta[256];
+					sprintf_s(atatta, "atata");
+					debugText.Print(atatta, 0, 300, 2.0f);
+					stage->SetTouch();
 				}
-				else
-				{
-					playerpos.x -= moveSpeed;
-					player->SetPlayerPos(playerpos);
-				}
-				char atatta[256];
-				sprintf_s(atatta, "atata");
-				debugText.Print(atatta, 0, 300, 2.0f);
-				stage->SetTouch();
 			}
 		}
-
 
 		for (std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
 			XMFLOAT3 enemypos = enemy->GetEnemyFbx()->GetPosition();
 			enemypos.y += enemyCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, enemypos, { 5,5,5 })) {
 				if (oldPlayerPos.x > enemypos.x - 20 && oldPlayerPos.x < enemypos.x + 20 && oldPlayerPos.y > enemypos.y + 10) {
+					sound->PlayWave("SE_.wav", 0);
 					player->StampJump();
 					enemy->SetDead();
 					if (enemy->GetEnemyType() == 4) {
@@ -419,6 +438,8 @@ void GameScene::Update() {
 				}
 				else {
 					isDead = true;
+					sound->PlayWave("SE_.wav", 0);
+
 				}
 				char atatta[256];
 				sprintf_s(atatta, "atata");
@@ -456,7 +477,7 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_Q)) { boostGauge--; }
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { boostGauge++; }
 		float boostNum = (boostRemainWegiht / maxBoostGauge) * player->GetBoostCapacity();
-		boostRemain->SetSize({ boostNum,40 });		
+		boostRemain->SetSize({ boostNum,40 });
 
 
 		//object1->Update();
@@ -477,11 +498,10 @@ void GameScene::Update() {
 			object->Update();
 		}
 	}
-
 	/*if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
-		backGroundOBJ->Initialize(1);
+		//backGroundOBJ->Initialize(1);
 
 	}*/
 
@@ -496,11 +516,37 @@ void GameScene::Update() {
 	//	}
 	//}
 
-	//if (isDead) {
-	//	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-	//		Reset();
-	//	}
-	//}
+	if (isDead) {
+		static bool pick = false;
+		score->SetPosition({ 750.0f, 300.0f });
+		if (!pick) {
+			retry->SetAlpha(1.0f);
+			//retry->SetSize({2.0f, 2.0f});
+			end->SetAlpha(0.5f);
+			//end->SetSize({ 1.0f, 1.0f });
+		}
+		else {
+			retry->SetAlpha(0.5f);
+			//retry->SetSize({ 1.0f, 1.0f });
+			end->SetAlpha(1.0f);
+			//end->SetSize({ 2.0f, 2.0f });
+		}
+
+		if (input->GetIns()->TriggerKey(DIK_D) && !pick) {
+			pick = true;
+		}
+		else if (input->GetIns()->TriggerKey(DIK_A) && pick) {
+			pick = false;
+		}
+
+		if (!pick && input->GetIns()->TriggerKey(DIK_SPACE)) {
+			Reset();
+		}
+		else if (pick && input->GetIns()->TriggerKey(DIK_SPACE)) {
+			*isEnd = true;
+		}
+	}
+
 	if (input->PushKey(DIK_1))flag = 1;
 	if (input->PushKey(DIK_2))flag = 2;
 	if (input->PushKey(DIK_3))flag = 3;
@@ -570,13 +616,19 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI等)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	if (!isTitle) {
-	
+
 		player->SpriteDraw();
 		boostBack->Draw();
 		boostRemain->Draw();
-		boostFrame->Draw();		
+		boostFrame->Draw();
+		if (isDead) {
+			gameover->Draw();
+			retry->Draw();
+			end->Draw();
+		}
+		boostFrame->Draw();
 		score->Draw();
-		if (!isStart) {
+		if (!isStart && !isDead) {
 			space->Draw();
 			rightArrow->Draw();
 			leftArrow->Draw();
@@ -590,9 +642,6 @@ void GameScene::Draw() {
 			title4->Draw();
 			title5->Draw();
 		}
-	}
-	if (isDead) {
-		//gameover->Draw();
 	}
 	if (isClear) {
 		//clear->Draw();
@@ -622,6 +671,8 @@ void GameScene::Reset() {
 	//camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	player->Reset();
+	//backGroundOBJ->Reset();
+	backGroundOBJ->Initialize(1);
 
 	isDead = false;
 	isClear = false;

@@ -56,7 +56,7 @@ public: //メンバ関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(bool* isEnd);
 
 	/// <summary>
 	/// 描画
@@ -101,6 +101,8 @@ private: //メンバ変数
 	Camera* camera = nullptr;
 	MapChip* mapchip = nullptr;
 
+	bool soundFlag = 0;
+
 	//ゲームオブジェクト & スプライト
 	Player* player = nullptr;
 	Sprite* sprite = nullptr;
@@ -118,6 +120,8 @@ private: //メンバ変数
 	Sprite* leftArrow = nullptr;
 	Sprite* rightArrow = nullptr;
 	Sprite* space = nullptr;
+	Sprite* retry = nullptr;
+	Sprite* end = nullptr;
 
 	Model* celestialSphereModel = nullptr;
 	Model* groundModel = nullptr;
