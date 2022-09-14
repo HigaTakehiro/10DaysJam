@@ -92,6 +92,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	Sprite::LoadTexture(17, L"Resources/SpaceKey.png");
 	space = Sprite::Create(17, { 580, 500 });
 
+	Sprite::LoadTexture(18, L"Resources/Retry.png");
+	retry = Sprite::Create(18, { 0, 500 });
+
+	Sprite::LoadTexture(19, L"Resources/End.png");
+	end = Sprite::Create(19, { 700, 500 });
+
 	time = 0.0f;
 	waitTime = 0.0f;
 
@@ -224,7 +230,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	BackGround3->SetScale({ 4,4,4 });*/
 }
 
-void GameScene::Update() {
+void GameScene::Update(bool* isEnd) {
 
 
 	// DirectX毎フレーム処理　ここから
@@ -410,7 +416,7 @@ void GameScene::Update() {
 			stagepos.y += stageCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
 				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
-					//isDead = true;	//プレイヤーの死亡
+					isDead = true;	//プレイヤーの死亡
 				}
 				else
 				{
@@ -512,11 +518,37 @@ void GameScene::Update() {
 	//	}
 	//}
 
-	//if (isDead) {
-	//	if (input->GetIns()->TriggerKey(DIK_SPACE)) {
-	//		Reset();
-	//	}
-	//}
+	if (isDead) {
+		static bool pick = false;
+		if (!pick) {
+			retry->SetAlpha(1.0f);
+			//retry->SetSize({2.0f, 2.0f});
+			end->SetAlpha(0.5f);
+			//end->SetSize({ 1.0f, 1.0f });
+		}
+		else {
+			retry->SetAlpha(0.5f);
+			//retry->SetSize({ 1.0f, 1.0f });
+			end->SetAlpha(1.0f);
+			//end->SetSize({ 2.0f, 2.0f });
+		}
+
+		if (input->GetIns()->TriggerKey(DIK_D) && !pick) {
+			pick = true;
+		}
+		else if (input->GetIns()->TriggerKey(DIK_A) && pick) {
+			pick = false;
+		}
+
+		if (!pick && input->GetIns()->TriggerKey(DIK_SPACE)) {
+			Reset();
+		}
+		else if (pick && input->GetIns()->TriggerKey(DIK_SPACE)) {
+			*isEnd = true;
+		}
+
+	}
+
 	if (input->PushKey(DIK_1))flag = 1;
 	if (input->PushKey(DIK_2))flag = 2;
 	if (input->PushKey(DIK_3))flag = 3;
@@ -587,8 +619,13 @@ void GameScene::Draw() {
 		boostBack->Draw();
 		boostRemain->Draw();
 		boostFrame->Draw();
+		if (isDead) {
+			gameover->Draw();
+			retry->Draw();
+			end->Draw();
+		}
 		score->Draw();
-		if (!isStart) {
+		if (!isStart && !isDead) {
 			space->Draw();
 			rightArrow->Draw();
 			leftArrow->Draw();
@@ -602,9 +639,6 @@ void GameScene::Draw() {
 			title4->Draw();
 			title5->Draw();
 		}
-	}
-	if (isDead) {
-		//gameover->Draw();
 	}
 	if (isClear) {
 		//clear->Draw();
