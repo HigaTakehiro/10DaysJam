@@ -153,6 +153,7 @@ private: //メンバ変数
 	FBXObject3d* playerJump = nullptr;
 	FBXModel* playerWaitModel = nullptr;
 	FBXObject3d* playerWait = nullptr;
+	FBXModel* model1 = nullptr;
 
 	//ゲームシーン用変数
 	float aimPosX;

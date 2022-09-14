@@ -549,7 +549,8 @@ void GameScene::Draw() {
 		BackGround2->Draw();
 		BackGround3->Draw();*/
 
-	//celetialSphere->Draw();
+		//celetialSphere->Draw();
+	}
 	for (int i = 0; i < 2; i++) {
 		wall[i]->Draw();
 	}
