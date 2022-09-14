@@ -24,7 +24,7 @@ void Enemy::Initialize(Model* model, FBXModel* fbxModel, Vector3 pos, Vector3 ro
 	fbxEnemy->PlayAnimation();
 
 	this->enemyType = enemyType;
-	if (enemyType == 7) {
+	if (enemyType == 4) {
 		this->energyModel = energyModel;
 		energyObj = Object3d::Create(energyModel);
 		pos.x += -5;
@@ -32,6 +32,8 @@ void Enemy::Initialize(Model* model, FBXModel* fbxModel, Vector3 pos, Vector3 ro
 		energyObj->SetPosition(pos);
 		energyObj->SetScale({ 5,5,5 });
 	}
+
+	direction = rand() % 2;
 }
 
 void Enemy::Update() {
@@ -60,7 +62,7 @@ void Enemy::Update() {
 
 		//enemy->Update();
 		fbxEnemy->Update();
-		if (enemyType == 7) {
+		if (enemyType == 4) {
 			XMFLOAT3 energypos = fbxEnemy->GetPosition();
 			energypos.x += -5;
 			energypos.z += -10;
@@ -73,7 +75,7 @@ void Enemy::Update() {
 void Enemy::Draw(DirectXCommon* dxCommon) {
 	//enemy->Draw();
 	fbxEnemy->Draw(dxCommon->GetCmdList());
-	if (enemyType == 7) {
+	if (enemyType ==4) {
 		energyObj->Draw();
 	}
 }

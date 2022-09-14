@@ -9,7 +9,7 @@ void Player::Initialize(Camera* camera) {
 	aim = Sprite::Create(1, { 0, 0 });
 	aim->SetSize(XMFLOAT2(100.0f, 100.0f));
 
-	playerModel = Model::CreateModel("Player");
+	playerModel = Model::CreateModel("Player_Jump");
 	player = Object3d::Create(playerModel);
 	playerScale = { 2, 2, 2 };
 	playerLPos = { 50, 950, -50 };
@@ -36,20 +36,20 @@ void Player::Finalize() {
 
 void Player::Update() {
 	bullets.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
-	if (KeyInput::GetIns()->TriggerKey(DIK_1)) {
+	/*if (KeyInput::GetIns()->TriggerKey(DIK_1)) {
 		if (fallFlag == false) { fallFlag = true; }
 		else { fallFlag = false; }
-	}
-	if (KeyInput::GetIns()->TriggerKey(DIK_B)) {
-		static float alpha = 0.1f;
-		if (alpha + 0.1f <= 1) {
-			alpha += 0.1f;
-		}
-		else {
-			alpha = 0;
-		}
-		aim->SetAlpha(alpha);
-	}
+	}*/
+	//if (KeyInput::GetIns()->TriggerKey(DIK_B)) {
+	//	static float alpha = 0.1f;
+	//	if (alpha + 0.1f <= 1) {
+	//		alpha += 0.1f;
+	//	}
+	//	else {
+	//		alpha = 0;
+	//	}
+	//	aim->SetAlpha(alpha);
+	//}
 
 	Move();
 	FreeFall();
@@ -81,6 +81,22 @@ void Player::Update() {
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets) {
 		bullet->Update();
 	}
+
+	if (boostCapacity < 20) {		
+		num = 0.0f;
+	}
+	if (boostCapacity < 15) {
+		num = 3.0f;
+	}
+	if (boostCapacity < 10) {
+		num = 6.0f;
+	}
+	if (boostCapacity < 5) {
+		num = 10.0f;
+	}
+	if (boostCapacity < 3) {
+		num = 15.0f;
+	}
 }
 
 void Player::SpriteDraw() {
@@ -103,12 +119,12 @@ void Player::Move() {
 	const float moveSpeed = 2.0f;
 	const float autoSpeed = 0.2;
 
-	if (KeyInput::GetIns()->PushKey(DIK_W)) {
+	/*if (KeyInput::GetIns()->PushKey(DIK_W)) {
 		playerLPos.y += moveSpeed;
-	}
-	if (KeyInput::GetIns()->PushKey(DIK_S)) {
+	}*/
+	/*if (KeyInput::GetIns()->PushKey(DIK_S)) {
 		playerLPos.y -= moveSpeed;
-	}
+	}*/
 	//if (KeyInput::GetIns()->PushKey(DIK_A)) {
 	//	playerLPos.x -= moveSpeed;
 	//}
@@ -159,6 +175,7 @@ void Player::Reset() {
 	boostCapacity = maxBoostCapacity;
 	player->SetPosition(playerLPos);
 	bullets.clear();
+	num = 0;
 }
 
 void Player::AimUpdate() {
@@ -202,8 +219,8 @@ void Player::FreeFall()
 	if (fallFlag) {
 		fallTime += 0.1f;
 		//float fallSpeed = 2 / 1 * gravity * fallTime * fallTime;
-		fallSpeed = gravity * fallTime * fallTime / 3;
-		if (fallSpeed > 4) { fallSpeed = 4.0f; }
+		fallSpeed = gravity * fallTime * fallTime /1.5;
+		if (fallSpeed > 3.5) { fallSpeed = 3.5f; }
 		playerLPos.y -= fallSpeed;
 		//playerLPos.y = 0.0f;
 		player->SetPosition(playerLPos);
@@ -220,7 +237,7 @@ void Player::JumpUpdate()
 			jumpTime += 0.1f;
 			playerLPos.y += jumpTimePower / jumpTime;
 			player->SetPosition(playerLPos);
-			if (jumpTimePower / jumpTime <= 0.1) {
+			if ( jumpTime >= 2.3f) {
 				jumpTime = 0;
 				jumpType = NONE_JUMP;
 				fallFlag = true;
@@ -240,13 +257,14 @@ void Player::DecelerationBoost()
 		boostCapacity -= 0.1f;
 		boostTime += 0.1f;
 		boostSpeed = boostPower * boostTime;
-		if (boostSpeed > 2) { boostSpeed = 2; }
-		playerLPos.y += boostSpeed;
-		player->SetPosition(playerLPos);
+		if (boostSpeed > 3) { boostSpeed = 3; }		
 	}
 	else
 	{
 		boostTime = 0;
-		boostSpeed = 0;
+		boostSpeed -= 0.3;
+		if (boostSpeed < 0) { boostSpeed = 0; }
 	}
+	playerLPos.y += boostSpeed;
+	player->SetPosition(playerLPos);
 }

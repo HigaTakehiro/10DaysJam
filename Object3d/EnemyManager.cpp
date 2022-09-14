@@ -21,7 +21,7 @@ void EnemyManager::Update()
 	if (num3 > 300/*&& stageNum <10*/)
 	{
 		stageNum++;
-		int enemyType = rand() % 8;
+		int enemyType = rand() % 5;
 		int type = rand() % 3 + 3;
 		float height = player->GetPlayerPos().y - 200 + 90;
 		height -= 100;
@@ -59,7 +59,7 @@ void EnemyManager::Update()
 		}
 		//地面をゲームシーンに追加
 		std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-		newEnemy->Initialize(enemyModel, fbxEnemyModel, enemypos, { 0,0,0 }, { 0.1,0.1,0.1 }, 7, energyModel);
+		newEnemy->Initialize(enemyModel, fbxEnemyModel, enemypos, { 0,0,0 }, { 0.1,0.1,0.1 },enemyType, energyModel);
 		enemies.push_back(std::move(newEnemy));
 		//if (type == 3 || type == 4 || type == 5) {
 		//	std::unique_ptr<Enemy> newEnemy2 = std::make_unique<Enemy>();

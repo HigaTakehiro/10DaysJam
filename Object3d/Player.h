@@ -102,6 +102,8 @@ public: //メンバ関数
 
 	void SetPlayerPos(XMFLOAT3 pos) { playerLPos = pos; }
 
+	void Recovery() { boostCapacity += 4; if (boostCapacity >= maxBoostCapacity) { boostCapacity = maxBoostCapacity; } };
+
 private: //メンバ関数
 	/// <summary>
 	/// 移動処理
@@ -127,6 +129,9 @@ private: //メンバ関数
 	/// ジャンプ更新処理
 	/// </summary>
 	void JumpUpdate();
+
+public:
+	float num = 0;
 
 private: //メンバ変数
 	Vector3 playerLPos = { 0, 0, 0 };
@@ -160,7 +165,7 @@ private: //メンバ変数
 	const float gravity = 0.098f;
 
 	float jumpTime = 0;
-	const float jumpTimePower = 0.3;
+	const float jumpTimePower = 0.8;
 	JumpType jumpType = NONE_JUMP;
 
 	bool decelerationFlag = false;

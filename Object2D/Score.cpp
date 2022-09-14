@@ -54,7 +54,7 @@ void Score::Initialize()
 
 void Score::Update()
 {
-	scoreTime += 0.005f;
+	scoreTime += 0.05f;
 	if (scoreTime > 1.0f)
 	{
 		scoreTime = 0.0f;
@@ -125,6 +125,13 @@ void Score::ReSet()
 {
 	scoreTime = 0.0f;
 	score = 0;
+
+	score6 = 0;
+	score5 = 0;
+	score4 = 0;
+	score3 = 0;
+	score2 = 0;
+	score1 = 0;
 }
 
 void Score::SetPosition(XMFLOAT2 pos)

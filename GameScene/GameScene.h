@@ -172,6 +172,8 @@ private: //メンバ変数
 	float time;
 	float waitTime;
 
+	XMFLOAT2 oldBoostRemen;
+
 	//パーティクル
 	ParticleManager* particleMan = nullptr;
 	const float PI = 3.1415926f;

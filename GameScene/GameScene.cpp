@@ -192,10 +192,9 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	playerWait->PlayAnimation();
 
 	isDead = false;
-	isClear = false;
-	isTitle = true;
+	isClear = false;	
 	isStart = false;
-	isTitle = true;
+	isTitle = false;
 
 	//sound
 	float a = 0.01;
@@ -222,33 +221,15 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	BackGround3 = Object3d::Create(ModelBackGround);
 	BackGround3->SetPosition({ 46,+800,0 });
 	BackGround3->SetScale({ 4,4,4 });*/
+	oldBoostRemen = boostRemain->GetPosition();	
 }
 
 void GameScene::Update() {
-
+	boostRemain->SetPosition(oldBoostRemen);
 
 	// DirectX毎フレーム処理　ここから
 	aimPosX = MouseInput::GetIns()->GetMousePoint().x;
 	aimPosY = MouseInput::GetIns()->GetMousePoint().y;
-
-	if (input->PushKey(DIK_RIGHT)) {
-		camera->CameraMoveEyeVector({ +2.0f, 0.0f, 0.0f });
-	}
-	if (input->PushKey(DIK_LEFT)) {
-		camera->CameraMoveEyeVector({ -2.0f, 0.0f, 0.0f });
-	}
-	if (input->PushKey(DIK_UP)) {
-		camera->CameraMoveEyeVector({ 0.0f, 0.0f, +2.0f });
-	}
-	if (input->PushKey(DIK_DOWN)) {
-		camera->CameraMoveEyeVector({ 0.0f, 0.0f, -2.0f });
-	}
-	if (input->PushKey(DIK_Q)) {
-		camera->CameraMoveEyeVector({ 0.0f, +2.0f, 0.0f });
-	}
-	if (input->PushKey(DIK_E)) {
-		camera->CameraMoveEyeVector({ 0.0f, -2.0f, 0.0f });
-	}
 
 	if (isTitle) {
 		const float maxTime1 = 20.0f;
@@ -363,7 +344,7 @@ void GameScene::Update() {
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
-		if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
+		/*if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { stageCenter += 10000; }
 		if (KeyInput::GetIns()->PushKey(DIK_Z)) { enemyCenter -= 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_C)) { enemyCenter += 1; }
@@ -371,14 +352,14 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_I)) { stageRad.x -= 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_P)) { stageRad.x += 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_B)) { stageRad.y -= 1; }
-		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }
+		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }*/
 
 
 
 		const float moveSpeed = 2.0f;
 		const float autoSpeed = 0.2;
 		XMFLOAT3 playerpos = player->GetPlayerPos();
-		if (KeyInput::GetIns()->PushKey(DIK_A)) {
+		if (KeyInput::GetIns()->PushKey(DIK_A)|| KeyInput::GetIns()->PushKey(DIK_LEFT)) {
 			playerpos.x -= moveSpeed;
 			player->SetPlayerPos(playerpos);
 		}
@@ -386,7 +367,7 @@ void GameScene::Update() {
 			XMFLOAT3 stagepos = stage->GetStagePos();
 			stagepos.y += stageCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 30) {
 					isDead = true;	//プレイヤーの死亡
 				}
 				else
@@ -401,7 +382,7 @@ void GameScene::Update() {
 			}
 		}
 
-		if (KeyInput::GetIns()->PushKey(DIK_D)) {
+		if (KeyInput::GetIns()->PushKey(DIK_D) || KeyInput::GetIns()->PushKey(DIK_RIGHT)) {
 			playerpos.x += moveSpeed;
 			player->SetPlayerPos(playerpos);
 		}
@@ -409,8 +390,8 @@ void GameScene::Update() {
 			XMFLOAT3 stagepos = stage->GetStagePos();
 			stagepos.y += stageCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
-					//isDead = true;	//プレイヤーの死亡
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 30) {
+					isDead = true;	//プレイヤーの死亡
 				}
 				else
 				{
@@ -432,6 +413,9 @@ void GameScene::Update() {
 				if (oldPlayerPos.x > enemypos.x - 20 && oldPlayerPos.x < enemypos.x + 20 && oldPlayerPos.y > enemypos.y + 10) {
 					player->StampJump();
 					enemy->SetDead();
+					if (enemy->GetEnemyType() == 4) {
+						player->Recovery();
+					}
 				}
 				else {
 					isDead = true;
@@ -453,11 +437,11 @@ void GameScene::Update() {
 
 
 		eyepos = camera->GetEye();
-		eyepos.y = player->GetPlayerPos().y;
+		eyepos.y = player->GetPlayerPos().y - 50;
 		eyepos.z = -300.0f;
 		camera->SetEye(eyepos);
 		targetpos = camera->GetTarget();
-		targetpos.y = player->GetPlayerPos().y;
+		targetpos.y = player->GetPlayerPos().y - 50;
 		camera->SetTarget(targetpos);
 		backGroundOBJ->Update(player->GetPlayerPos().y);
 		/*BackGround1->Update();
@@ -472,7 +456,7 @@ void GameScene::Update() {
 		if (KeyInput::GetIns()->PushKey(DIK_Q)) { boostGauge--; }
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { boostGauge++; }
 		float boostNum = (boostRemainWegiht / maxBoostGauge) * player->GetBoostCapacity();
-		boostRemain->SetSize({ boostNum,40 });
+		boostRemain->SetSize({ boostNum,40 });		
 
 
 		//object1->Update();
@@ -494,12 +478,12 @@ void GameScene::Update() {
 		}
 	}
 
-	if (input->GetIns()->TriggerKey(DIK_R))
+	/*if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
 		backGroundOBJ->Initialize(1);
 
-	}
+	}*/
 
 	//if (input->GetIns()->TriggerKey(DIK_SPACE)) {
 	//	
@@ -524,6 +508,9 @@ void GameScene::Update() {
 	if (input->PushKey(DIK_5))flag = 5;
 	ParticleUpdate();
 	//ScoreUP();
+
+	oldBoostRemen = boostRemain->GetPosition();
+	boostRemain->SetPosition({ boostRemain->GetPosition().x + player->num ,boostRemain->GetPosition().y });
 }
 
 void GameScene::Draw() {
@@ -583,10 +570,11 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI等)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	if (!isTitle) {
+	
 		player->SpriteDraw();
 		boostBack->Draw();
 		boostRemain->Draw();
-		boostFrame->Draw();
+		boostFrame->Draw();		
 		score->Draw();
 		if (!isStart) {
 			space->Draw();
@@ -610,7 +598,7 @@ void GameScene::Draw() {
 		//clear->Draw();
 	}
 	//ScoreDraw();
-	debugText.DrawAll(dxCommon->GetCmdList());
+	//debugText.DrawAll(dxCommon->GetCmdList());
 	Sprite::PostDraw();
 
 	// ４．描画コマンドここまで
