@@ -11,6 +11,10 @@ public:
 	void Initialize();
 	void Update(float posy);
 	void Draw();
+
+	float GetPos1() { return posBackGround1.y; };
+	float GetPos2() { return posBackGround2.y; };
+	float GetPos3() { return posBackGround3.y; };
 private:
 	Model* ModelBackGround = nullptr;
 	Object3d* BackGround1 = nullptr;
@@ -19,8 +23,8 @@ private:
 	XMFLOAT3 BackGroundSize = { 4,4,4 };
 
 	XMFLOAT3 posBackGround1 = { 46,0,0 };
-	XMFLOAT3 posBackGround2 = { 46,+800,0 };
-	XMFLOAT3 posBackGround3 = { 46,-800,0 };
+	XMFLOAT3 posBackGround2 = { 46,800,0 };
+	XMFLOAT3 posBackGround3 = { 46,1600,0 };
 	float playerdistance1;
 	float playerdistance2;
 	float playerdistance3;

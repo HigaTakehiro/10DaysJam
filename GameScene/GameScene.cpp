@@ -199,6 +199,10 @@ void GameScene::Update() {
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
 
+		char buck[256];
+		sprintf_s(buck, "Back1y:%f Back2y:%f Back3y:%f", backGroundOBJ->GetPos1(), backGroundOBJ->GetPos2(), backGroundOBJ->GetPos3());
+		debugText.Print(buck, 0, 200, 2.0f);
+
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
 		for (const std::unique_ptr<Enemy>& enemy : enemies) {
