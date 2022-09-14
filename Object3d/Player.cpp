@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "SafeDelete.h"
+#include "Stage.h"
 
 void Player::Initialize(Camera* camera) {
 	this->camera = camera;

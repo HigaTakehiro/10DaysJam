@@ -12,6 +12,7 @@
 #include "PlayerBullet.h"
 #include <memory>
 #include  "MatCalc.h"
+class Stage;
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
@@ -99,6 +100,8 @@ public: //メンバ関数
 	/// </summary>
 	float GetBoostCapacity() { return boostCapacity; }
 
+	void SetPlayerPos(XMFLOAT3 pos) { playerLPos = pos; }
+
 private: //メンバ関数
 	/// <summary>
 	/// 移動処理
@@ -123,7 +126,7 @@ private: //メンバ関数
 	/// <summary>
 	/// ジャンプ更新処理
 	/// </summary>
-	void JumpUpdate();	
+	void JumpUpdate();
 
 private: //メンバ変数
 	Vector3 playerLPos = { 0, 0, 0 };
@@ -153,7 +156,7 @@ private: //メンバ変数
 
 	bool fallFlag = true;
 	float fallSpeed = 0;
-	float fallTime =0;
+	float fallTime = 0;
 	const float gravity = 0.098f;
 
 	float jumpTime = 0;

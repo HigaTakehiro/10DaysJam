@@ -7,51 +7,75 @@
 
 using namespace std;
 
-void Enemy::Initialize(Model* model, Vector3 pos, Vector3 rot, Vector3 scale) {
+void Enemy::Initialize(Model* model, FBXModel* fbxModel, Vector3 pos, Vector3 rot, Vector3 scale, int enemyType, Model* energyModel) {
 	enemyModel = model;
 	enemy = Object3d::Create(enemyModel);
 	enemy->SetPosition(pos);
 	enemy->SetRotation(rot);
 	enemy->SetScale(scale);
 
-	//testEnemyModel = FbxLoader::GetInstance()->LoadModelFromFile(modelName);
-    //testEnemy = new FBXObject3d;
-	//testEnemy->Initialize();
-	//testEnemy->SetModel(testEnemyModel);
-	//testEnemy->SetPosition(pos);
-	//testEnemy->SetRotation(rot);
-	//testEnemy->SetScale(scale);
-	//testEnemy->PlayAnimation();
+	fbxEnemyModel = fbxModel;
+	fbxEnemy = new FBXObject3d;
+	fbxEnemy->Initialize();
+	fbxEnemy->SetModel(fbxEnemyModel);
+	fbxEnemy->SetPosition(pos);
+	fbxEnemy->SetRotation(rot);
+	fbxEnemy->SetScale(scale);
+	fbxEnemy->PlayAnimation();
+
+	this->enemyType = enemyType;
+	if (enemyType == 7) {
+		this->energyModel = energyModel;
+		energyObj = Object3d::Create(energyModel);
+		pos.x += -5;
+		pos.z += -10;
+		energyObj->SetPosition(pos);
+		energyObj->SetScale({ 5,5,5 });
+	}
 }
 
 void Enemy::Update() {
-	if (enemy != nullptr) {		
-		XMFLOAT3 pos = enemy->GetPosition();
-		if (direction == 0) {			
+	if (fbxEnemy != nullptr) {
+		XMFLOAT3 pos = fbxEnemy->GetPosition();
+		if (direction == 0) {
+			fbxEnemy->SetRotation({ 0,-90,0 });
 			pos.x -= speed;
-			enemy->SetPosition(pos);
-			if (enemy->GetPosition().x < -92) {
+			fbxEnemy->SetPosition(pos);
+			if (fbxEnemy->GetPosition().x < -92) {
 				pos.x = -92;
-				enemy->SetPosition(pos);
+				fbxEnemy->SetPosition(pos);
 				direction = 1;
 			}
 		}
 		else if (direction == 1) {
+			fbxEnemy->SetRotation({ 0,90,0 });
 			pos.x += speed;
-			enemy->SetPosition(pos);
-			if (enemy->GetPosition().x > 172) {
+			fbxEnemy->SetPosition(pos);
+			if (fbxEnemy->GetPosition().x > 172) {
 				pos.x = 172;
-				enemy->SetPosition(pos);
+				fbxEnemy->SetPosition(pos);
 				direction = 0;
 			}
 		}
 
-		enemy->Update();
+		//enemy->Update();
+		fbxEnemy->Update();
+		if (enemyType == 7) {
+			XMFLOAT3 energypos = fbxEnemy->GetPosition();
+			energypos.x += -5;
+			energypos.z += -10;
+			energyObj->SetPosition(energypos);
+			energyObj->Update();
+		}
 	}
 }
 
 void Enemy::Draw(DirectXCommon* dxCommon) {
-	enemy->Draw();
+	//enemy->Draw();
+	fbxEnemy->Draw(dxCommon->GetCmdList());
+	if (enemyType == 7) {
+		energyObj->Draw();
+	}
 }
 
 void Enemy::OnCollision() {

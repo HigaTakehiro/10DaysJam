@@ -108,8 +108,14 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	stageManager = new StageManager;
 	stageManager->Initialize(player, stageModel);
 
+	//FBXの初期化
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
+	FBXObject3d::SetDevice(dxCommon->GetDev());
+	FBXObject3d::SetCamera(camera);
+	FBXObject3d::CreateGraphicsPipeline();
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("Enemy01");
 	enemyManager = new EnemyManager;
-	enemyManager->Initialize(player, enemyModel);
+	enemyManager->Initialize(player, enemyModel, model1);
 
 	LoadEnemyData();
 
@@ -121,11 +127,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	objects = mapchip->MapSet(map1_a, 7, 4, 0);
 	objects2 = mapchip->MapSet(map1_b, 7, 4, 1);
 
-	//FBXの初期化
-	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
-	FBXObject3d::SetDevice(dxCommon->GetDev());
-	FBXObject3d::SetCamera(camera);
-	FBXObject3d::CreateGraphicsPipeline();
+	//FBX
 	/*model1 = FbxLoader::GetInstance()->LoadModelFromFile("Enemy01");
 	object1 = new FBXObject3d;
 	object1->Initialize();
@@ -135,7 +137,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 
 	isDead = false;
 	isClear = false;
-	isTitle = false;
+	isTitle = true;
 
 	//sound
 	float a = 0.01;
@@ -172,6 +174,7 @@ void GameScene::Update() {
 	aimPosY = MouseInput::GetIns()->GetMousePoint().y;
 
 	if (isTitle) {
+		camera->SetEye({ 50, 1, -700 });
 		if (input->GetIns()->TriggerKey(DIK_SPACE)) {
 			isTitle = false;
 		}
@@ -187,6 +190,8 @@ void GameScene::Update() {
 		//targetpos.y = eyepos.y;
 		//camera->SetTarget(targetpos);
 		//エネミーを上から踏んだらジャンプ
+		//camera->SetEye({ 50, 1, -300 });
+
 
 		if (input->PushKey(DIK_RIGHT)) {
 			camera->CameraMoveEyeVector({ +2.0f, 0.0f, 0.0f });
@@ -223,15 +228,6 @@ void GameScene::Update() {
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
-		//for (const std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
-		//	if (Collision::GetIns()->OBJSphereCollision(player->GetPlayerObject(), enemy->GetEnemyObj(), 8, 8)) {
-		//		if (player->GetPlayerPos().y > enemy->GetEnemyObj()->GetPosition().y)
-		//		{
-		//			//player->StampJump();
-		//		}
-		//	}
-		//}
-
 		XMFLOAT3 playerpos = player->GetPlayerPos();
 		if (KeyInput::GetIns()->PushKey(DIK_Q)) { stageCenter -= 10000; }
 		if (KeyInput::GetIns()->PushKey(DIK_E)) { stageCenter += 10000; }
@@ -246,15 +242,43 @@ void GameScene::Update() {
 		for (std::unique_ptr<Stage>& stage : stageManager->GetStages()) {
 			XMFLOAT3 stagepos = stage->GetStagePos();
 			stagepos.y += stageCenter;
-
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
-				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60) {
-					if (oldPlayerPos.y > stagepos.y + 10) {
-						/*if (stage->IsTouch() == false){
-						}*/
-						//isDead = true;	//プレイヤーの死亡
-					}
+				if (oldPlayerPos.x > stagepos.x - 60 && oldPlayerPos.x < stagepos.x + 60 && oldPlayerPos.y > stagepos.y + 10) {
+					//isDead = true;	//プレイヤーの死亡
 				}
+				else
+				{
+
+				}
+
+				/*const float moveSpeed = 2.0f;
+				const float autoSpeed = 0.2;
+				XMFLOAT3 playerpos = player->GetPlayerPos();*/
+				//if (KeyInput::GetIns()->PushKey(DIK_W)) {
+				//	playerpos.y += moveSpeed;
+				//	player->SetPlayerPos(playerpos);
+				//}
+				//if (KeyInput::GetIns()->PushKey(DIK_S)) {
+				//	playerpos.y -= moveSpeed;
+				//	player->SetPlayerPos(playerpos);
+				//}
+				//if (KeyInput::GetIns()->PushKey(DIK_A)) {
+				//	playerpos.x -= moveSpeed;
+				//	player->SetPlayerPos(playerpos);
+				//	if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
+				//		playerpos.x += moveSpeed;
+				//		player->SetPlayerPos(playerpos);
+				//	}
+				//}
+				//if (KeyInput::GetIns()->PushKey(DIK_D)) {
+				//	playerpos.x += moveSpeed;
+				//	player->SetPlayerPos(playerpos);
+				//	if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, stagepos, stageRad)) {
+				//		playerpos.x -= moveSpeed;
+				//		player->SetPlayerPos(playerpos);
+				//	}
+				//}
+
 				char atatta[256];
 				sprintf_s(atatta, "atata");
 				debugText.Print(atatta, 0, 300, 2.0f);
@@ -262,25 +286,15 @@ void GameScene::Update() {
 			}
 		}
 
-		int a = 1, b = 6, c = 3;
-		if (a == 1) {
-			if (b == 2) {
-				int y = 500;
-			}
-		}
-		else {
-			int g = 4444;
-		}
-
 		for (std::unique_ptr<Enemy>& enemy : enemyManager->GetEnemies()) {
-			XMFLOAT3 enemypos = enemy->GetEnemyObj()->GetPosition();
+			XMFLOAT3 enemypos = enemy->GetEnemyFbx()->GetPosition();
 			enemypos.y += enemyCenter;
 			if (Collision::GetIns()->BoxCollision(player->GetPlayerPos(), playerRad, enemypos, { 5,5,5 })) {
 				if (oldPlayerPos.x > enemypos.x - 20 && oldPlayerPos.x < enemypos.x + 20 && oldPlayerPos.y > enemypos.y + 10) {
 					player->StampJump();
 					enemy->SetDead();
 				}
-				else{
+				else {
 					isDead = true;
 				}
 				char atatta[256];
@@ -299,10 +313,11 @@ void GameScene::Update() {
 
 
 
-		XMFLOAT3 eyepos = camera->GetEye();
+		eyepos = camera->GetEye();
 		eyepos.y = player->GetPlayerPos().y;
+		eyepos.z = -300.0f;
 		camera->SetEye(eyepos);
-		XMFLOAT3 targetpos = camera->GetTarget();
+		targetpos = camera->GetTarget();
 		targetpos.y = player->GetPlayerPos().y;
 		camera->SetTarget(targetpos);
 		backGroundOBJ->Update(player->GetPlayerPos().y);

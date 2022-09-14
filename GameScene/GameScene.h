@@ -180,5 +180,8 @@ private: //ƒƒ“ƒo•Ï”
 	float enemyCenter = 5;
 	float stageCenter = 28;
 	XMFLOAT3 oldPlayerPos = { 0,0,0 };
+
+	XMFLOAT3 eyepos;
+	XMFLOAT3 targetpos;
 };
 

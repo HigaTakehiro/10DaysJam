@@ -6,11 +6,12 @@
 #include "DirectXCommon.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "FBXObject3d.h"
 
 class EnemyManager
 {
 public:
-	void Initialize(Player* player, Model* enemyModel);
+	void Initialize(Player* player, Model* enemyModel,FBXModel* fbxEnemyModel);
 	void Update();
 	void Draw(DirectXCommon* dxCommon);
 
@@ -18,6 +19,8 @@ public:
 
 private:
 	Model* enemyModel = nullptr;
+	Model* energyModel = nullptr;
+	FBXModel* fbxEnemyModel = nullptr;
 	Player* player = nullptr;
 	XMFLOAT3 playerOldPos;
 	std::list<std::unique_ptr<Enemy>>enemies;

@@ -1,10 +1,12 @@
 #include "EnemyManager.h"
 
-void EnemyManager::Initialize(Player* player, Model* enemyModel)
+void EnemyManager::Initialize(Player* player, Model* enemyModel, FBXModel* fbxEnemyModel)
 {
 	this->player = player;
 	this->enemyModel = enemyModel;
+	this->fbxEnemyModel = fbxEnemyModel;
 	playerOldPos = player->GetPlayerPos();
+	energyModel = Model::CreateModel("energy");
 }
 
 void EnemyManager::Update()
@@ -19,8 +21,9 @@ void EnemyManager::Update()
 	if (num3 > 300/*&& stageNum <10*/)
 	{
 		stageNum++;
+		int enemyType = rand() % 8;
 		int type = rand() % 3 + 3;
-		float height = player->GetPlayerPos().y - 200 + 70;
+		float height = player->GetPlayerPos().y - 200 + 90;
 		height -= 100;
 		XMFLOAT3 enemypos = { 0,0,0 };
 		XMFLOAT3 enemypos2 = { 0,0,0 };
@@ -56,7 +59,7 @@ void EnemyManager::Update()
 		}
 		//地面をゲームシーンに追加
 		std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-		newEnemy->Initialize(enemyModel, enemypos, { 0,0,0 }, { 10,10,50 });
+		newEnemy->Initialize(enemyModel, fbxEnemyModel, enemypos, { 0,0,0 }, { 0.1,0.1,0.1 }, 7, energyModel);
 		enemies.push_back(std::move(newEnemy));
 		//if (type == 3 || type == 4 || type == 5) {
 		//	std::unique_ptr<Enemy> newEnemy2 = std::make_unique<Enemy>();
