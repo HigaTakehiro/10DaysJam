@@ -19,6 +19,7 @@
 #include "PlayerBullet.h"
 #include "ParticleManager.h"
 #include"Score.h"
+#include "StageManager.h"
 
 #include <sstream>
 #include "Stage.h"
@@ -73,18 +74,18 @@ public: //メンバ関数
 	/// </summary>
 	void EnemyDataUpdate();
 
-/// <summary>
-/// パーティクル関連
-/// </summary>
+	/// <summary>
+	/// パーティクル関連
+	/// </summary>
 	void ParticleCoal();
 
 	void ParticleUpdate();
 
-///// <summary>
-///// スコア関連
-///// </summary>
-//	void ScoreUP();
-//	void ScoreDraw();
+	///// <summary>
+	///// スコア関連
+	///// </summary>
+	//	void ScoreUP();
+	//	void ScoreDraw();
 
 private: //メンバ関数
 
@@ -125,10 +126,11 @@ private: //メンバ変数
 
 	Model* stageModel = nullptr;
 	Model* enemyModel = nullptr;
-	//Object3d* stageObj[20] = { nullptr };
-	std::list<std::unique_ptr<Stage>>stages;
+	//Object3d* stageObj[20] = { nullptr };	
 	//Model* stageModel = nullptr;
 	Object3d* wall[2] = { nullptr };
+	Object3d* stageTest[3] = { nullptr };
+	StageManager* stageManager = nullptr;
 
 
 	//マップチップ用変数
@@ -185,11 +187,17 @@ private: //メンバ変数
 	int Score9 = 0;
 	float scoredis = 16;
 	float scoreTime = 0.0f;*/
-	
+
 
 
 	float maxBoostGauge = 20;
 	float boostGauge = maxBoostGauge;
 	float boostRemainWegiht = 200;
+	XMFLOAT3 playerRad = { 7,10,10 };
+	XMFLOAT3 enemyRad = { 10,10,10 };
+	XMFLOAT3 stageRad = { 50,20,10 };
+	float enemyCenter = 5;
+	float stageCenter = 28;
+	XMFLOAT3 oldPlayerPos = { 0,0,0 };
 };
 

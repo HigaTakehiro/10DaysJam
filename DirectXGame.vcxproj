@@ -176,6 +176,7 @@
     <ClCompile Include="Object3d\Player.cpp" />
     <ClCompile Include="Object3d\PlayerBullet.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
+    <ClCompile Include="Stage\StageManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -294,6 +295,7 @@
     <ClInclude Include="Object3d\Player.h" />
     <ClInclude Include="Object3d\PlayerBullet.h" />
     <ClInclude Include="Stage\Stage.h" />
+    <ClInclude Include="Stage\StageManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectXGame.rc" />
