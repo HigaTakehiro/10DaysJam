@@ -52,54 +52,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	//Nombers
 	score = new Score();
 	score->Initialize();
-	/*Sprite::LoadTexture(60, L"Resources/Numbers/No0.png");
-	Sprite::LoadTexture(61, L"Resources/Numbers/No1.png");
-	Sprite::LoadTexture(62, L"Resources/Numbers/No2.png");
-	Sprite::LoadTexture(63, L"Resources/Numbers/No3.png");
-	Sprite::LoadTexture(64, L"Resources/Numbers/No4.png");
-	Sprite::LoadTexture(65, L"Resources/Numbers/No5.png");
-	Sprite::LoadTexture(66, L"Resources/Numbers/No6.png");
-	Sprite::LoadTexture(67, L"Resources/Numbers/No7.png");
-	Sprite::LoadTexture(68, L"Resources/Numbers/No8.png");
-	Sprite::LoadTexture(69, L"Resources/Numbers/No9.png");
-	for (int i = 0; i < 10; i++)
-	{
-		score1[i] = Sprite::Create(60 + i, { 0, 0 });
-		score1[i]->SetPosition({ scoredis * 18, 100 });
-		score1[i]->SetSize({ 32,64 });
-		score2[i] = Sprite::Create(60 + i, { 0, 0 });
-		score2[i]->SetPosition({ scoredis * 16, 100 });
-		score2[i]->SetSize({ 32,64 });
 
-		score3[i] = Sprite::Create(60 + i, { 0, 0 });
-		score3[i]->SetPosition({ scoredis * 14, 100 });
-		score3[i]->SetSize({ 32,64 });
-
-		score4[i] = Sprite::Create(60 + i, { 0, 0 });
-		score4[i]->SetPosition({ scoredis * 12, 100 });
-		score4[i]->SetSize({ 32,64 });
-
-		score5[i] = Sprite::Create(60 + i, { 0, 0 });
-		score5[i]->SetPosition({ scoredis * 10, 100 });
-		score5[i]->SetSize({ 32,64 });
-
-		score6[i] = Sprite::Create(60 + i, { 0, 0 });
-		score6[i]->SetPosition({ scoredis * 8, 100 });
-		score6[i]->SetSize({ 32,64 });
-
-		score7[i] = Sprite::Create(60 + i, { 0, 0 });
-		score7[i]->SetPosition({ scoredis * 6, 100 });
-		score7[i]->SetSize({ 32,64 });
-
-		score8[i] = Sprite::Create(60 + i, { 0, 0 });
-		score8[i]->SetPosition({ scoredis * 4, 100 });
-		score8[i]->SetSize({ 32,64 });
-
-		score9[i] = Sprite::Create(60 + i, { 0, 0 });
-		score9[i]->SetPosition({ scoredis * 2, 100 });
-		score9[i]->SetSize({ 32,64 });
-
-	}*/
 
 	Sprite::LoadTexture(7, L"Resources/BoostGauge_Back.png");
 	boostBack = Sprite::Create(7, { 0, 0 });
@@ -165,7 +118,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	isTitle = false;
 
 	//sound
-	float a = 0.05;
+	float a = 0.01;
 	/*sound->LoadWave("Title.wav");
 	sound->SetVolume("Title.wav", a);
 	sound->PlayWave("Title.wav", true);*/
@@ -176,6 +129,19 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Sound* sound) {
 	particleMan = ParticleManager::Create(dxCommon->GetDev());
 	particleMan->Initialize(dxCommon->GetDev());
 
+	//”wŒi
+	backGroundOBJ = new BackGround();
+	backGroundOBJ->Initialize();
+	/*ModelBackGround = Model::CreateModel("BackGround");
+	BackGround1 = Object3d::Create(ModelBackGround);
+	BackGround1->SetPosition({ 46,0,0 });
+	BackGround1->SetScale({4,4,4});
+	BackGround2 = Object3d::Create(ModelBackGround);
+	BackGround2->SetPosition({ 46,-800,0 });
+	BackGround2->SetScale({ 4,4,4 });
+	BackGround3 = Object3d::Create(ModelBackGround);
+	BackGround3->SetPosition({ 46,+800,0 });
+	BackGround3->SetScale({ 4,4,4 });*/
 }
 
 void GameScene::Update() {
@@ -232,6 +198,10 @@ void GameScene::Update() {
 		char fallSpeed[256];
 		sprintf_s(fallSpeed, "fallSpeed : %f", player->GetFallSpeed());
 		debugText.Print(fallSpeed, 0, 100, 2.0f);
+
+		char buck[256];
+		sprintf_s(buck, "Back1y:%f Back2y:%f Back3y:%f", backGroundOBJ->GetPos1(), backGroundOBJ->GetPos2(), backGroundOBJ->GetPos3());
+		debugText.Print(buck, 0, 200, 2.0f);
 
 		const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullet();
 
@@ -301,7 +271,10 @@ void GameScene::Update() {
 		XMFLOAT3 targetpos = camera->GetTarget();
 		targetpos.y = player->GetPlayerPos().y;
 		camera->SetTarget(targetpos);
-
+		backGroundOBJ->Update(player->GetPlayerPos().y);
+		/*BackGround1->Update();
+		BackGround2->Update();
+		BackGround3->Update();*/
 		celetialSphere->Update();
 		ground->Update();
 		player->Update();
@@ -371,7 +344,12 @@ void GameScene::Draw() {
 	//3DƒIƒuƒWƒFƒNƒg•`‰æˆ—
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	//ground->Draw();
-	celetialSphere->Draw();
+	backGroundOBJ->Draw();
+	/*BackGround1->Draw();
+	BackGround2->Draw();
+	BackGround3->Draw();*/
+
+	//celetialSphere->Draw();
 	for (std::unique_ptr<Stage>& stage : stages) {
 		stage->Draw();
 	}
