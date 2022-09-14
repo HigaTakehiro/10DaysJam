@@ -379,8 +379,6 @@ void GameScene::Update(bool* isEnd) {
 		if (KeyInput::GetIns()->PushKey(DIK_B)) { stageRad.y -= 1; }
 		if (KeyInput::GetIns()->PushKey(DIK_M)) { stageRad.y += 1; }
 
-
-
 		const float moveSpeed = 2.0f;
 		const float autoSpeed = 0.2;
 		XMFLOAT3 playerpos = player->GetPlayerPos();
@@ -503,7 +501,7 @@ void GameScene::Update(bool* isEnd) {
 	if (input->GetIns()->TriggerKey(DIK_R))
 	{
 		Reset();
-		backGroundOBJ->Initialize(1);
+		//backGroundOBJ->Initialize(1);
 
 	}
 
@@ -520,6 +518,7 @@ void GameScene::Update(bool* isEnd) {
 
 	if (isDead) {
 		static bool pick = false;
+		score->SetPosition({750.0f, 300.0f});
 		if (!pick) {
 			retry->SetAlpha(1.0f);
 			//retry->SetSize({2.0f, 2.0f});
@@ -668,6 +667,8 @@ void GameScene::Reset() {
 	//camera->SetTarget(XMFLOAT3(50, 0, 0));
 
 	player->Reset();
+	//backGroundOBJ->Reset();
+	backGroundOBJ->Initialize(1);
 
 	isDead = false;
 	isClear = false;

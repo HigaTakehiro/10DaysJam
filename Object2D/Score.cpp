@@ -50,6 +50,8 @@ void Score::Initialize()
 		Score10[i]->SetSize(scoreSize);
 
 	}
+
+	SetPosition({ 200.0f, 100.0f });
 }
 
 void Score::Update()
@@ -125,6 +127,7 @@ void Score::ReSet()
 {
 	scoreTime = 0.0f;
 	score = 0;
+	SetPosition({ 200, 100 });
 }
 
 void Score::SetPosition(XMFLOAT2 pos)
